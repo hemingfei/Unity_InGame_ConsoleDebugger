@@ -15,7 +15,7 @@ using UnityEngine;
 namespace Debugger_For_Unity {
 
 	/// <summary>
-	/// Class Explanation
+	/// Manager which contains the window root that the windows registed in
 	/// </summary>
 	public class DebuggerManager
 	{

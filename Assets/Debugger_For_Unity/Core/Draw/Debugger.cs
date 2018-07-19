@@ -14,19 +14,16 @@ namespace Debugger_For_Unity
 {
 
     /// <summary>
-    /// Class quick explanation
+    /// Debugger, MonoBehaviour
     /// </summary>
     [DisallowMultipleComponent]
     public partial class Debugger : MonoBehaviour
     {
         #region  Attributes and Properties
         /// <summary>
-        /// Private Members
+        /// Custom Settings
         /// </summary>
-
-        //
-        // Custom Settings
-        //
+        
         [SerializeField]
         private GUISkin m_skin = null; // gui skin if you want
 
@@ -47,9 +44,11 @@ namespace Debugger_For_Unity
 
         [SerializeField]
         private Texture m_errorImage = null;
-        //
-        //Size
-        //
+
+        /// <summary>
+        /// Size
+        /// </summary>
+        
         private static Rect DefaultIconRect = new Rect(0f, 0f, 50f, 50f); // size of the icon
 
         private static readonly Rect DefaultDragRect = new Rect(0f, 0f, float.MaxValue, 20); // size of the drag area, set it full
@@ -58,9 +57,10 @@ namespace Debugger_For_Unity
 
         private static float DefaultWindowScale = 1f; // scale size of icon and window
 
-        //
-        // Windows
-        //
+        /// <summary>
+        /// Windows
+        /// </summary>
+        
         private DebuggerManager m_debuggerManager = new DebuggerManager();
 
         private Fps m_fps = null;
@@ -72,6 +72,7 @@ namespace Debugger_For_Unity
         /// <summary>
         /// Properties
         /// </summary>
+        
         public bool ShowFullWindow { get; set; } //= false;
 
         public Rect IconRect { get; set; }
@@ -79,10 +80,7 @@ namespace Debugger_For_Unity
         public Rect WindowRect { get; set; }
 
         public float WindowScale { get; set; } //= 1;
-
-
         #endregion
-
 
         #region Engine Methods
         private void Awake()
@@ -94,7 +92,7 @@ namespace Debugger_For_Unity
 
             IconRect = new Rect(0, 0, 50, 50);
 
-            //WindowRect = new Rect(0, 0, 1000, 500);
+            WindowRect = new Rect(0, 0, 200, 100);
 
             // UI adaptive
             m_uiAdaptiveScale = (Screen.width / 960.0f); // using 960 * 540 as default native resolution
@@ -118,32 +116,13 @@ namespace Debugger_For_Unity
         private void Start()
         {
             // register the windows
-            RegisterDebuggerWindow("Console", m_console);
-            for(int i = 0; i < 20; i++)
-            {
-                Debug.Log("1");
-                Debug.LogWarning("2");
-                Debug.LogError("3");
-            }
-            
+            RegisterDebuggerWindow("Console", m_console);     
         }
 
         private void Update()
         {
             // update fps, the unscaledDeltaTime is used
             m_fps.Update(Time.deltaTime, Time.unscaledDeltaTime);
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                Debug.Log(Random.Range(1,5));
-            }
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                Debug.LogWarning(Random.Range(1, 5));
-            }
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Debug.LogError(Random.Range(1, 5));
-            }
         }
 
         private void OnGUI()
@@ -187,23 +166,22 @@ namespace Debugger_For_Unity
         }
         #endregion
 
-
-        #region Public Methods
-
-        #endregion
-
-
-        #region Protected Methods
-
-        #endregion
-
-
         #region Private Methods
+        /// <summary>
+        /// register the window into the manager, which will be recored in the root winddow of manager
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="debuggerWindow"></param>
+        /// <param name="args"></param>
         private void RegisterDebuggerWindow(string path, IWindow debuggerWindow, params object[] args)
         {
             m_debuggerManager.RegisterDebuggerWindow(path, debuggerWindow, args);
         }
 
+        /// <summary>
+        /// drwo the icon in OnGUI
+        /// </summary>
+        /// <param name="windowId"></param>
         private void DrawIcon(int windowId)
         {
             // drag at the top area
@@ -225,7 +203,6 @@ namespace Debugger_For_Unity
             GUILayout.BeginVertical("box");
             {
                 // info
-
                 color = Color.white;
                 GUIContent info = new GUIContent(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_console.InfoCount.ToString()), m_infoImage);
                 if (GUILayout.Button(info, guiStyle, GUILayout.Width(30f), GUILayout.Height(20f)))
@@ -233,9 +210,7 @@ namespace Debugger_For_Unity
                     ShowFullWindow = true;
                 }
 
-
                 // warning
-
                 color = Color.yellow;
                 GUIContent warning = new GUIContent(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_console.WarningCount.ToString()), m_warningImage);
                 if (GUILayout.Button(warning, guiStyle, GUILayout.Width(30f), GUILayout.Height(20f)))
@@ -243,9 +218,7 @@ namespace Debugger_For_Unity
                     ShowFullWindow = true;
                 }
 
-
                 // error
-
                 color = Color.red;
                 GUIContent error = new GUIContent(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_console.ErrorCount.ToString()), m_errorImage);
                 if (GUILayout.Button(error, guiStyle, GUILayout.Width(30f), GUILayout.Height(20f)))
@@ -257,12 +230,23 @@ namespace Debugger_For_Unity
             GUILayout.EndVertical();
         }
 
+        /// <summary>
+        /// drwo the window in OnGUI
+        /// </summary>
+        /// <param name="windowId"></param>
         private void DrawWindow(int windowId)
         {
+            // drag at the top area
             GUI.DragWindow(DefaultDragRect);
+
+            // draw the windows registered in manager
             DrawDebuggerWindowGroup(m_debuggerManager.DebuggerWindowRoot);
         }
 
+        /// <summary>
+        /// drwo the windows from window group
+        /// </summary>
+        /// <param name="debuggerWindowGroup"></param>
         private void DrawDebuggerWindowGroup(WindowGroup debuggerWindowGroup)
         {
             if (debuggerWindowGroup == null)
@@ -307,11 +291,6 @@ namespace Debugger_For_Unity
                 debuggerWindowGroup.SelectedWindow.OnWindowDraw();
             }
         }
-
-        #endregion
-
-
-        #region Static Methods
 
         #endregion
     }

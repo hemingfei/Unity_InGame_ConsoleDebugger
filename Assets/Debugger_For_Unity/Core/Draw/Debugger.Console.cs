@@ -22,9 +22,6 @@ namespace Debugger_For_Unity {
         private sealed partial class Console : IWindow
         {
             #region  Attributes and Properties
-            /// <summary>
-            /// Public Members
-            /// </summary>
 
             /// <summary>
             /// Properties
@@ -34,10 +31,6 @@ namespace Debugger_For_Unity {
             public int WarningCount { get; private set; }
 
             public int ErrorCount { get; private set; }
-
-            /// <summary>
-            /// Protected Members
-            /// </summary>
 
             /// <summary>
             /// Private Members
@@ -253,12 +246,6 @@ namespace Debugger_For_Unity {
             }
             #endregion
 
-
-            #region Protected Methods
-
-            #endregion
-
-
             #region Private Methods
             /// <summary>
             /// += unity's log message event
@@ -320,6 +307,9 @@ namespace Debugger_For_Unity {
                 return color;
             }
 
+            /// <summary>
+            /// calculate the collapse logs count
+            /// </summary>
             private  void RefreshCollapseCount()
             {
                 m_collapseCheckLogs.Clear();
@@ -343,17 +333,6 @@ namespace Debugger_For_Unity {
                 }
             }
             #endregion
-
-
-            #region Static Methods
-
-            #endregion
-
-        }
-
-
-        
-        
+        }  
     }
-
 }
