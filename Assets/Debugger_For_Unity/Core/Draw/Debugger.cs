@@ -35,12 +35,16 @@ namespace Debugger_For_Unity
 
         [SerializeField]
         private float m_fpsRefreshInterval = 0.5f;
+
+        [SerializeField]
+        private float m_initWindowScale = 1;
+
         //
         //Size
         //
         private static Rect DefaultIconRect = new Rect(0f, 0f, 50f, 50f); // size of the icon
 
-        private static readonly Rect DefaultDragRect = new Rect(0f, 0f, float.MaxValue, float.MaxValue); // size of the drag area, set it full
+        private static readonly Rect DefaultDragRect = new Rect(0f, 0f, float.MaxValue, 20); // size of the drag area, set it full
 
         private static Rect DefaultWindowRect = new Rect(10f, 10f, 640f, 480f); // size of window
 
@@ -51,18 +55,22 @@ namespace Debugger_For_Unity
         //
         private DebuggerManager m_debuggerManager = new DebuggerManager();
 
-        private Fps m_Fps = null;
+        private Fps m_fps = null;
+
+        private float m_uiAdaptiveScale = 1;
+
+        private Console m_console = new Console();
 
         /// <summary>
         /// Properties
         /// </summary>
-        public bool ShowFullWindow { get; set; }
+        public bool ShowFullWindow { get; set; } //= false;
 
         public Rect IconRect { get; set; }
 
         public Rect WindowRect { get; set; }
 
-        public float WindowScale { get; set; }
+        public float WindowScale { get; set; } //= 1;
 
 
         #endregion
@@ -72,13 +80,19 @@ namespace Debugger_For_Unity
         private void Awake()
         {
             // give default values here (C# 4)
-            WindowScale = 1;
+            WindowScale = m_initWindowScale;
+
+            ShowFullWindow = true;
+
+            IconRect = new Rect(0, 0, 100, 50);
+
+            //WindowRect = new Rect(0, 0, 1000, 500);
 
             // UI adaptive
-            WindowScale *= (Screen.width / 960.0f); // using 960 * 540 as default native resolution
+            m_uiAdaptiveScale = (Screen.width / 960.0f); // using 960 * 540 as default native resolution
 
             // new fps
-            m_Fps = new Fps(m_fpsRefreshInterval);
+            m_fps = new Fps(m_fpsRefreshInterval);
 
             // check drag items
             if (m_maskCanvas == null)
@@ -93,14 +107,27 @@ namespace Debugger_For_Unity
             }
         }
 
+        private void Start()
+        {
+            // register the windows
+            RegisterDebuggerWindow("Console", m_console);
+            for(int i = 0; i < 20; i++)
+            {
+                Debug.Log("1");
+                Debug.LogWarning("2");
+                Debug.LogError("3");
+            }
+            
+        }
+
         private void Update()
         {
-            m_Fps.Update(Time.deltaTime, Time.unscaledDeltaTime);
+            // update fps, the unscaledDeltaTime is used
+            m_fps.Update(Time.deltaTime, Time.unscaledDeltaTime);
         }
 
         private void OnGUI()
         {
-
             if (m_debuggerManager == null)
             {
                 return;
@@ -110,7 +137,7 @@ namespace Debugger_For_Unity
             Matrix4x4 cachedMatrix = GUI.matrix;
 
             GUI.skin = m_skin;
-            GUI.matrix = Matrix4x4.Scale(new Vector3(WindowScale, WindowScale, 1f));
+            GUI.matrix = Matrix4x4.Scale(new Vector3(WindowScale * m_uiAdaptiveScale, WindowScale * m_uiAdaptiveScale, 1f));
             
             if (ShowFullWindow)
             {
@@ -154,11 +181,9 @@ namespace Debugger_For_Unity
         private void DrawIcon(int windowId)
         {
             GUI.DragWindow(DefaultDragRect);
-            GUILayout.Space(5);
-            Color32 color = Color.cyan;
 
-            string title = string.Format("<b>FPS: {0}</b>", m_Fps.CurrentFps.ToString("F2"));
-            if (GUILayout.Button(title, GUILayout.Width(100f), GUILayout.Height(50f)))
+            string title = string.Format("<b>FPS: {0}</b>", m_fps.CurrentFps.ToString("F2"));
+            if (GUILayout.Button(title, GUILayout.Width(80f), GUILayout.Height(40f)))
             {
                 ShowFullWindow = true;
             }

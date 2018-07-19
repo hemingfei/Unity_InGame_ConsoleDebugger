@@ -7,6 +7,7 @@
 /// </summary>--------------------------------------------------
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,48 +19,286 @@ namespace Debugger_For_Unity {
     /// </summary>
     public partial class Debugger
 	{
-        #region  Attributes and Properties
-        /// <summary>
-        /// Public Members
-        /// </summary>
+        private sealed partial class Console : IWindow
+        {
+            #region  Attributes and Properties
+            /// <summary>
+            /// Public Members
+            /// </summary>
 
-        /// <summary>
-        /// Properties
-        /// </summary>
+            /// <summary>
+            /// Properties
+            /// </summary>
+            public int InfoCount { get; private set; }
 
-        /// <summary>
-        /// Protected Members
-        /// </summary>
+            public int WarningCount { get; private set; }
 
-        /// <summary>
-        /// Private Members
-        /// </summary>
+            public int ErrorCount { get; private set; }
 
-        #endregion
+            /// <summary>
+            /// Protected Members
+            /// </summary>
+
+            /// <summary>
+            /// Private Members
+            /// </summary>
+
+            [SerializeField]
+            private int m_maxLine = 100;
+
+            private Vector2 m_logScrollPosition = Vector2.zero;
+
+            private Vector2 m_stackScrollPosition = Vector2.zero;
+
+            private bool m_lockScroll = true;
+
+            private bool m_collapse = false;
+
+            private bool m_infoFilter = true;
+
+            private bool m_warningFilter = true;
+
+            private bool m_errorFilter = true;
+
+            private LinkedList<LogMsg> m_logs = new LinkedList<LogMsg>();
+
+            private LinkedListNode<LogMsg> m_selectedLog = null;
+            #endregion
+
+            #region Interface Public Methods
+            public void OnWindowAwake(params object[] args)
+            {
+                Application.logMessageReceived += OnLogMessageReceived;
+            }
+
+            public void OnWindowDestroy()
+            {
+                Application.logMessageReceived -= OnLogMessageReceived;
+                m_logs.Clear();
+            }
+
+            public void OnWindowDraw()
+            {
+                // update the count of different types of logs
+                RefreshCount();
+
+                // draw the clear button and show the toggles of lock scroll and three types of log filters
+                GUILayout.BeginHorizontal();
+                {
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Clear", GUILayout.Width(100f)))
+                    {
+                        m_logs.Clear();
+                    }
+                    //m_collapse = GUILayout.Toggle(m_collapse, "Collapse", GUILayout.Width(100f));
+                    m_infoFilter = GUILayout.Toggle(m_infoFilter, string.Format("Info ({0}) \t", InfoCount.ToString()), GUILayout.Width(100f));
+                    m_warningFilter = GUILayout.Toggle(m_warningFilter, string.Format("Warning ({0}) \t", WarningCount.ToString()), GUILayout.Width(100f));
+                    m_errorFilter = GUILayout.Toggle(m_errorFilter, string.Format("Error ({0}) \t", ErrorCount.ToString()), GUILayout.Width(100f));
+                    GUILayout.FlexibleSpace();
+                    m_lockScroll = GUILayout.Toggle(m_lockScroll, "Lock Scroll", GUILayout.Width(100f));
+                }
+                GUILayout.EndHorizontal();
+
+                // draw the log message console panel
+                GUILayout.BeginVertical("box");
+                {
+                    if (m_lockScroll)
+                    {
+                        m_logScrollPosition.y = float.MaxValue;
+                    }
+
+                    m_logScrollPosition = GUILayout.BeginScrollView(m_logScrollPosition, GUILayout.Height(200f));
+                    {
+                        bool selected = false;
+                        for (LinkedListNode<LogMsg> i = m_logs.First; i != null; i = i.Next)
+                        {
+                            switch (i.Value.LogType)
+                            {
+                                case LogType.Log:
+                                    if (!m_infoFilter)
+                                    {
+                                        continue;
+                                    }
+                                    break;
+                                case LogType.Warning:
+                                    if (!m_warningFilter)
+                                    {
+                                        continue;
+                                    }
+                                    break;
+                                case LogType.Error:
+                                    if (!m_errorFilter)
+                                    {
+                                        continue;
+                                    }
+                                    break;
+                            }
+                            if (GUILayout.Toggle(m_selectedLog == i, GetLogMsgString(i.Value)))
+                            {
+                                selected = true;
+                                if (m_selectedLog != i)
+                                {
+                                    m_selectedLog = i;
+                                    m_stackScrollPosition = Vector2.zero;
+                                }
+                            }
+                        }
+                        if (!selected)
+                        {
+                            m_selectedLog = null;
+                        }
+                    }
+                    GUILayout.EndScrollView();
+                }
+                GUILayout.EndVertical();
+
+                // draw the log stack console panel
+                GUILayout.BeginVertical("box");
+                {
+                    m_stackScrollPosition = GUILayout.BeginScrollView(m_stackScrollPosition, GUILayout.Height(100f));
+                    {
+                        if (m_selectedLog != null)
+                        {
+                            GUILayout.BeginHorizontal();
+                            Color32 color = GetLogMsgColor(m_selectedLog.Value.LogType);
+                            GUILayout.Label(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_selectedLog.Value.LogMessage));
+                            if (GUILayout.Button("COPY", GUILayout.Width(60f), GUILayout.Height(30f)))
+                            {
+                                TextEditor textEditor = new TextEditor();
+                                textEditor.text = string.Format("{0}\n\n{1}", m_selectedLog.Value.LogMessage, m_selectedLog.Value.StackTrack);
+                                textEditor.OnFocus();
+                                textEditor.Copy();
+                            }
+                            GUILayout.EndHorizontal();
+                            GUILayout.Label(m_selectedLog.Value.StackTrack);
+                        }
+                        GUILayout.EndScrollView();
+                    }
+                }
+                GUILayout.EndVertical();
+            }
+
+            public void OnWindowEnter()
+            {
+
+            }
+
+            public void OnWindowExit()
+            {
+
+            }
+
+            public void OnWindowStay(float deltaTime, float unscaledDeltaTime)
+            {
+                
+            }
+            #endregion
+
+            #region Public Methods
+            /// <summary>
+            /// refresh the log msg specific type count
+            /// </summary>
+            public void RefreshCount()
+            {
+                InfoCount = 0;
+                WarningCount = 0;
+                ErrorCount = 0;
+                for (LinkedListNode<LogMsg> i = m_logs.First; i != null; i = i.Next)
+                {
+                    switch (i.Value.LogType)
+                    {
+                        case LogType.Log:
+                            InfoCount++;
+                            break;
+                        case LogType.Warning:
+                            WarningCount++;
+                            break;
+                        case LogType.Error:
+                            ErrorCount++;
+                            break;
+                    }
+                }
+            }
+            #endregion
 
 
-        #region Engine Methods
+            #region Protected Methods
 
-        #endregion
-
-
-        #region Public Methods
-
-        #endregion
+            #endregion
 
 
-        #region Protected Methods
+            #region Private Methods
+            /// <summary>
+            /// += unity's log message event
+            /// </summary>
+            /// <param name="logMessage"></param>
+            /// <param name="stackTrace"></param>
+            /// <param name="logType"></param>
+            private void OnLogMessageReceived(string logMessage, string stackTrace, LogType logType)
+            {
+                if (logType == LogType.Assert || logType == LogType.Exception)
+                {
+                    logType = LogType.Error;
+                }
 
-        #endregion
+                m_logs.AddLast(new LogMsg(logType, logMessage, stackTrace));
+                while (m_logs.Count > m_maxLine)
+                {
+                    m_logs.RemoveFirst();
+                }
+            }
+
+            /// <summary>
+            /// get the message from LogMsg
+            /// </summary>
+            /// <param name="logNode"></param>
+            /// <returns></returns>
+            private string GetLogMsgString(LogMsg logNode)
+            {
+                Color32 color = GetLogMsgColor(logNode.LogType);
+                return string.Format("<color=#{0}{1}{2}{3}>{4}{5}</color>",
+                    color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"),
+                    logNode.LogTime.ToString("[HH:mm:ss.fff]"), logNode.LogMessage);
+            }
+
+            /// <summary>
+            /// get the color from the type
+            /// </summary>
+            /// <param name="logType"></param>
+            /// <returns></returns>
+            private Color32 GetLogMsgColor(LogType logType)
+            {
+                Color32 color = Color.white;
+                switch (logType)
+                {
+                    case LogType.Log:
+                        color = Color.white;
+                        break;
+                    case LogType.Warning:
+                        color = Color.yellow;
+                        break;
+                    case LogType.Error:
+                        color = Color.red;
+                        break;
+                    default:
+                        color = Color.red;
+                        break;
+                }
+
+                return color;
+            }
+            #endregion
 
 
-        #region Private Methods
+            #region Static Methods
 
-        #endregion
+            #endregion
+
+        }
 
 
-        #region Static Methods
-
-        #endregion
+        
+        
     }
+
 }

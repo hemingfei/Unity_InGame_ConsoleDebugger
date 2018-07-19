@@ -40,7 +40,7 @@ namespace Debugger_For_Unity {
         void OnWindowExit();
 
         /// <summary>
-        /// Update
+        /// Update, draw the window
         /// </summary>
         /// <param name="deltaTime"></param>
         /// <param name="unscaledDeltaTime"></param>
