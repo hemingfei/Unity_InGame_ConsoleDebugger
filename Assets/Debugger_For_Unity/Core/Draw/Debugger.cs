@@ -74,6 +74,9 @@ namespace Debugger_For_Unity
             // give default values here (C# 4)
             WindowScale = 1;
 
+            // UI adaptive
+            WindowScale *= (Screen.width / 960.0f); // using 960 * 540 as default native resolution
+
             // new fps
             m_Fps = new Fps(m_fpsRefreshInterval);
 
