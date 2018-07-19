@@ -39,6 +39,14 @@ namespace Debugger_For_Unity
         [SerializeField]
         private float m_initWindowScale = 1;
 
+        [SerializeField]
+        private Texture m_infoImage = null;
+
+        [SerializeField]
+        private Texture m_warningImage = null;
+
+        [SerializeField]
+        private Texture m_errorImage = null;
         //
         //Size
         //
@@ -82,9 +90,9 @@ namespace Debugger_For_Unity
             // give default values here (C# 4)
             WindowScale = m_initWindowScale;
 
-            ShowFullWindow = true;
+            ShowFullWindow = false;
 
-            IconRect = new Rect(0, 0, 100, 50);
+            IconRect = new Rect(0, 0, 50, 50);
 
             //WindowRect = new Rect(0, 0, 1000, 500);
 
@@ -128,6 +136,14 @@ namespace Debugger_For_Unity
             {
                 Debug.Log(Random.Range(1,5));
             }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                Debug.LogWarning(Random.Range(1, 5));
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.LogError(Random.Range(1, 5));
+            }
         }
 
         private void OnGUI()
@@ -153,7 +169,13 @@ namespace Debugger_For_Unity
             }
             else
             {
-                IconRect = GUILayout.Window(0, IconRect, DrawIcon, "<b>DEBUGGER</b>");
+                GUIStyle guiStyle = new GUIStyle();
+                guiStyle.fontSize = 20;
+                guiStyle.alignment = TextAnchor.LowerCenter;
+                Color32 color = Color.white;
+                string title = string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_fps.CurrentFps.ToString("F2"));
+
+                IconRect = GUILayout.Window(0, IconRect, DrawIcon, string.Format("<b>{0}</b>", title));
                 if (m_maskCanvas != null && m_maskCanvas.activeSelf)
                 {
                     m_maskCanvas.SetActive(false);
@@ -184,13 +206,55 @@ namespace Debugger_For_Unity
 
         private void DrawIcon(int windowId)
         {
+            // drag at the top area
             GUI.DragWindow(DefaultDragRect);
 
-            string title = string.Format("<b>FPS: {0}</b>", m_fps.CurrentFps.ToString("F2"));
-            if (GUILayout.Button(title, GUILayout.Width(80f), GUILayout.Height(40f)))
+            // string stype used below code
+            GUIStyle guiStyle = new GUIStyle();
+            guiStyle.fontSize = 10;
+            guiStyle.alignment = TextAnchor.LowerCenter;
+            Color32 color = Color.white;
+
+            // write a tip told user that the above number is FPS
+            GUILayout.Label(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), "FPS"), guiStyle);
+
+            // add the log info warning error tips at bottom
+            m_console.RefreshCount();
+
+            // draw the log count
+            GUILayout.BeginVertical("box");
             {
-                ShowFullWindow = true;
+                // info
+
+                color = Color.white;
+                GUIContent info = new GUIContent(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_console.InfoCount.ToString()), m_infoImage);
+                if (GUILayout.Button(info, guiStyle, GUILayout.Width(30f), GUILayout.Height(20f)))
+                {
+                    ShowFullWindow = true;
+                }
+
+
+                // warning
+
+                color = Color.yellow;
+                GUIContent warning = new GUIContent(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_console.WarningCount.ToString()), m_warningImage);
+                if (GUILayout.Button(warning, guiStyle, GUILayout.Width(30f), GUILayout.Height(20f)))
+                {
+                    ShowFullWindow = true;
+                }
+
+
+                // error
+
+                color = Color.red;
+                GUIContent error = new GUIContent(string.Format("<color=#{0}{1}{2}{3}><b>{4}</b></color>", color.r.ToString("x2"), color.g.ToString("x2"), color.b.ToString("x2"), color.a.ToString("x2"), m_console.ErrorCount.ToString()), m_errorImage);
+                if (GUILayout.Button(error, guiStyle, GUILayout.Width(30f), GUILayout.Height(20f)))
+                {
+                    ShowFullWindow = true;
+                }
+
             }
+            GUILayout.EndVertical();
         }
 
         private void DrawWindow(int windowId)

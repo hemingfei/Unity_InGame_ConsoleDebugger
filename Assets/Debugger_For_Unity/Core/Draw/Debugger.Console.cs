@@ -97,8 +97,8 @@ namespace Debugger_For_Unity {
                     {
                         m_logs.Clear();
                     }
-                    m_collapse = GUILayout.Toggle(m_collapse, "Collapse", GUILayout.Width(100f));
-                    m_infoFilter = GUILayout.Toggle(m_infoFilter, string.Format("Info ({0}) \t", InfoCount.ToString()), GUILayout.Width(100f));
+                    m_collapse = GUILayout.Toggle(m_collapse, "Collapse", GUILayout.Width(120f));
+                    m_infoFilter = GUILayout.Toggle(m_infoFilter, string.Format("Info ({0}) \t", InfoCount.ToString()), GUILayout.Width(80f));
                     m_warningFilter = GUILayout.Toggle(m_warningFilter, string.Format("Warning ({0}) \t", WarningCount.ToString()), GUILayout.Width(100f));
                     m_errorFilter = GUILayout.Toggle(m_errorFilter, string.Format("Error ({0}) \t", ErrorCount.ToString()), GUILayout.Width(100f));
                     GUILayout.FlexibleSpace();
