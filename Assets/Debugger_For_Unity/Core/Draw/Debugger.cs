@@ -124,6 +124,10 @@ namespace Debugger_For_Unity
         {
             // update fps, the unscaledDeltaTime is used
             m_fps.Update(Time.deltaTime, Time.unscaledDeltaTime);
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Debug.Log(Random.Range(1,5));
+            }
         }
 
         private void OnGUI()

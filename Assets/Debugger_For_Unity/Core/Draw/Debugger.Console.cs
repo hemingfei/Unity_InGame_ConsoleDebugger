@@ -63,6 +63,10 @@ namespace Debugger_For_Unity {
             private LinkedList<LogMsg> m_logs = new LinkedList<LogMsg>();
 
             private LinkedListNode<LogMsg> m_selectedLog = null;
+
+            private Dictionary<string, int> m_collapseCheckLogs = new Dictionary<string, int>();
+
+            private Dictionary<string, LogMsg> m_collapseLogs = new Dictionary<string, LogMsg>();
             #endregion
 
             #region Interface Public Methods
@@ -82,6 +86,9 @@ namespace Debugger_For_Unity {
                 // update the count of different types of logs
                 RefreshCount();
 
+                // update collapse logs count
+                RefreshCollapseCount();
+
                 // draw the clear button and show the toggles of lock scroll and three types of log filters
                 GUILayout.BeginHorizontal();
                 {
@@ -90,7 +97,7 @@ namespace Debugger_For_Unity {
                     {
                         m_logs.Clear();
                     }
-                    //m_collapse = GUILayout.Toggle(m_collapse, "Collapse", GUILayout.Width(100f));
+                    m_collapse = GUILayout.Toggle(m_collapse, "Collapse", GUILayout.Width(100f));
                     m_infoFilter = GUILayout.Toggle(m_infoFilter, string.Format("Info ({0}) \t", InfoCount.ToString()), GUILayout.Width(100f));
                     m_warningFilter = GUILayout.Toggle(m_warningFilter, string.Format("Warning ({0}) \t", WarningCount.ToString()), GUILayout.Width(100f));
                     m_errorFilter = GUILayout.Toggle(m_errorFilter, string.Format("Error ({0}) \t", ErrorCount.ToString()), GUILayout.Width(100f));
@@ -133,13 +140,38 @@ namespace Debugger_For_Unity {
                                     }
                                     break;
                             }
-                            if (GUILayout.Toggle(m_selectedLog == i, GetLogMsgString(i.Value)))
+
+                            if (m_collapse)
                             {
-                                selected = true;
-                                if (m_selectedLog != i)
+                                LogType type = i.Value.LogType;
+                                string msg = i.Value.LogMessage;
+                                string stack = i.Value.StackTrack;
+                                string keyCheck = type.ToString() + msg + stack;
+                                if (m_collapseLogs[keyCheck] == i.Value)
                                 {
-                                    m_selectedLog = i;
-                                    m_stackScrollPosition = Vector2.zero;
+                                    string s = string.Format("[{0}] {1} ", m_collapseCheckLogs[keyCheck], GetLogMsgString(i.Value));
+                                    if (GUILayout.Toggle(m_selectedLog == i, s))
+                                    {
+                                        selected = true;
+                                        if (m_selectedLog != i)
+                                        {
+                                            m_selectedLog = i;
+                                            m_stackScrollPosition = Vector2.zero;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // not collapse
+                                if (GUILayout.Toggle(m_selectedLog == i, GetLogMsgString(i.Value)))
+                                {
+                                    selected = true;
+                                    if (m_selectedLog != i)
+                                    {
+                                        m_selectedLog = i;
+                                        m_stackScrollPosition = Vector2.zero;
+                                    }
                                 }
                             }
                         }
@@ -286,6 +318,29 @@ namespace Debugger_For_Unity {
                 }
 
                 return color;
+            }
+
+            private  void RefreshCollapseCount()
+            {
+                m_collapseCheckLogs.Clear();
+                m_collapseLogs.Clear();
+                for (LinkedListNode<LogMsg> i = m_logs.First; i != null; i = i.Next)
+                {
+                    LogType type = i.Value.LogType;
+                    string msg = i.Value.LogMessage;
+                    string stack = i.Value.StackTrack;
+                    string keyCheck = type.ToString() + msg + stack;
+                    if (m_collapseCheckLogs.ContainsKey(keyCheck))
+                    {
+                        m_collapseCheckLogs[keyCheck]++;
+                        m_collapseLogs[keyCheck] = i.Value;
+                    }
+                    else
+                    {
+                        m_collapseCheckLogs.Add(keyCheck, 1);
+                        m_collapseLogs.Add(keyCheck, i.Value);
+                    }
+                }
             }
             #endregion
 
