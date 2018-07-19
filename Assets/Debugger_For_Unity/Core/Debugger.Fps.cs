@@ -7,6 +7,7 @@
 /// </summary>--------------------------------------------------
 #endregion
 
+using System;
 using UnityEngine;
 
 namespace Debugger_For_Unity {
@@ -19,26 +20,28 @@ namespace Debugger_For_Unity {
         /// <summary>
         /// Fps
         /// </summary>
+        [Serializable]
         private sealed class Fps
         {
             #region  Attributes and Properties
             /// <summary>
             /// Private Members
             /// </summary>
-            private float m_UpdateInterval;
-            private int m_Frames;
-            private float m_Accumulator;
-            private float m_TimeLeft;
+            [SerializeField]
+            private float m_refreshInterval = 0.5f;
+            private int m_frames;
+            private float m_accumulator;
+            private float m_timeLeft;
 
             /// <summary>
             /// Properties
             /// </summary>
             public float CurrentFps { get; private set; }
-            private float UpdateInterval
+            private float RefreshInterval
             {
                 get
                 {
-                    return m_UpdateInterval;
+                    return m_refreshInterval;
                 }
                 set
                 {
@@ -47,7 +50,7 @@ namespace Debugger_For_Unity {
                         Debug.LogError("Update interval should be positive value. Current is " + value);
                         return;
                     }
-                    m_UpdateInterval = value;
+                    m_refreshInterval = value;
                     Reset();
                 }
             }
@@ -55,31 +58,21 @@ namespace Debugger_For_Unity {
 
             #region Public Methods
             /// <summary>
-            /// Constructor
-            /// Init the value of Fps refresh interval
-            /// </summary>
-            /// <param name="updateInterval"> the interval seconds to refresh the current FPS</param>
-            public Fps(float updateInterval = 0.5f)
-            {
-                UpdateInterval = updateInterval;
-            }
-
-            /// <summary>
             /// Be invoked at the Debugger.Main's real MonoBehaviour's Update
             /// </summary>
             /// <param name="deltaTime">Time.deltaTime, elapseSeconds</param>
             /// <param name="unscaledDeltaTime">Time.unscaledDeltatime, realElapseSeconds</param>
             public void Update(float deltaTime, float unscaledDeltaTime)
             {
-                m_Frames++;
-                m_Accumulator += unscaledDeltaTime;
-                m_TimeLeft -= unscaledDeltaTime;
-                if (m_TimeLeft <= 0f)
+                m_frames++;
+                m_accumulator += unscaledDeltaTime;
+                m_timeLeft -= unscaledDeltaTime;
+                if (m_timeLeft <= 0f)
                 {
-                    CurrentFps = m_Accumulator > 0f ? m_Frames / m_Accumulator : 0f;
-                    m_Frames = 0;
-                    m_Accumulator = 0f;
-                    m_TimeLeft += m_UpdateInterval;
+                    CurrentFps = m_accumulator > 0f ? m_frames / m_accumulator : 0f;
+                    m_frames = 0;
+                    m_accumulator = 0f;
+                    m_timeLeft += m_refreshInterval;
                 }
             }
             #endregion
@@ -91,9 +84,9 @@ namespace Debugger_For_Unity {
             private void Reset()
             {
                 CurrentFps = 0f;
-                m_Frames = 0;
-                m_Accumulator = 0f;
-                m_TimeLeft = 0f;
+                m_frames = 0;
+                m_accumulator = 0f;
+                m_timeLeft = 0f;
             }
             #endregion
         }

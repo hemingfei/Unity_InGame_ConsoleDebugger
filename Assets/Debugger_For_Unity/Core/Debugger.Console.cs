@@ -19,6 +19,7 @@ namespace Debugger_For_Unity {
     /// </summary>
     public partial class Debugger
 	{
+        [Serializable]
         private sealed partial class Console : IWindow
         {
             #region  Attributes and Properties
@@ -37,7 +38,7 @@ namespace Debugger_For_Unity {
             /// </summary>
 
             [SerializeField]
-            private int m_maxLine = 100;
+            private int m_maxLines = 100;
 
             private Vector2 m_logScrollPosition = Vector2.zero;
 
@@ -261,7 +262,7 @@ namespace Debugger_For_Unity {
                 }
 
                 m_logs.AddLast(new LogMsg(logType, logMessage, stackTrace));
-                while (m_logs.Count > m_maxLine)
+                while (m_logs.Count > m_maxLines)
                 {
                     m_logs.RemoveFirst();
                 }

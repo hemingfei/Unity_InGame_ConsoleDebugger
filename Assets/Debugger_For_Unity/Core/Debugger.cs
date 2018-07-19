@@ -24,18 +24,7 @@ namespace Debugger_For_Unity
         /// Custom Settings
         /// </summary>
         
-        [SerializeField]
-        private GUISkin m_skin = null; // gui skin if you want
-
-        [SerializeField]
-        private GameObject m_maskCanvas = null; // when open debugger window, it can touch the background or not
-
-        [SerializeField]
-        private float m_fpsRefreshInterval = 0.5f;
-
-        [SerializeField]
-        private float m_initWindowScale = 1;
-
+        [Header("Drag If You Want")]
         [SerializeField]
         private Texture m_infoImage = null;
 
@@ -44,6 +33,16 @@ namespace Debugger_For_Unity
 
         [SerializeField]
         private Texture m_errorImage = null;
+
+        [SerializeField]
+        private GUISkin m_skin = null; // gui skin if you want
+
+        [SerializeField]
+        private GameObject m_maskCanvas = null; // when open debugger window, it can touch the background or not
+
+        [Header("Settings")]
+        [SerializeField]
+        private float m_initWindowScale = 1;
 
         /// <summary>
         /// Size
@@ -63,10 +62,12 @@ namespace Debugger_For_Unity
         
         private DebuggerManager m_debuggerManager = new DebuggerManager();
 
-        private Fps m_fps = null;
-
         private float m_uiAdaptiveScale = 1;
 
+        [SerializeField]
+        private Fps m_fps = new Fps();
+
+        [SerializeField]
         private Console m_console = new Console();
 
         /// <summary>
@@ -96,9 +97,6 @@ namespace Debugger_For_Unity
 
             // UI adaptive
             m_uiAdaptiveScale = (Screen.width / 960.0f); // using 960 * 540 as default native resolution
-
-            // new fps
-            m_fps = new Fps(m_fpsRefreshInterval);
 
             // check drag items
             if (m_maskCanvas == null)
