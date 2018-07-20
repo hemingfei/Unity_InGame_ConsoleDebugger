@@ -300,6 +300,71 @@ Prefab:
       propertyPath: m_console.m_maxLine
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGround
+      value: 
+      objectReference: {fileID: 2800000, guid: 91cd05d63c059c441a4771ec574ea568, type: 3}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnFocused.m_TextColor.r
+      value: 0.9245283
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnFocused.m_TextColor.g
+      value: 0.082858644
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnFocused.m_TextColor.b
+      value: 0.082858644
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnFocused.m_Background
+      value: 
+      objectReference: {fileID: 2800000, guid: 91cd05d63c059c441a4771ec574ea568, type: 3}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnNormal.m_TextColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnNormal.m_TextColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnNormal.m_TextColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_OnNormal.m_Background
+      value: 
+      objectReference: {fileID: 2800000, guid: 91cd05d63c059c441a4771ec574ea568, type: 3}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_Normal.m_TextColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_Normal.m_TextColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_Normal.m_TextColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114145650979413100, guid: f8fa0f289772c794984a4af773b03b46,
+        type: 2}
+      propertyPath: m_debug.m_backGroundStyle.m_Normal.m_Background
+      value: 
+      objectReference: {fileID: 2800000, guid: 91cd05d63c059c441a4771ec574ea568, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f8fa0f289772c794984a4af773b03b46, type: 2}
   m_IsPrefabParent: 0

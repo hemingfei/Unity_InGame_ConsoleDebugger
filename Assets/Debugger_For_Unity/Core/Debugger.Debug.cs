@@ -41,6 +41,8 @@ namespace Debugger_For_Unity {
             private Dictionary<int, string> m_debugButtonDescritionDict = new Dictionary<int, string>();
 
             // select debug
+            [SerializeField]
+            private GUIStyle m_backGroundStyle = null;
             private int m_debugSelectMethodNum = 0;
             private Dictionary<int, string> m_debugSelectMethodDict = new Dictionary<int, string>();
             private Dictionary<int, string> m_debugSelectDescritionDict = new Dictionary<int, string>();
@@ -59,8 +61,10 @@ namespace Debugger_For_Unity {
             private string[] m_matchedCodeArray = { };
             private bool m_showCodeScroll = false;
             private Vector2 scrollViewCodeVector = Vector2.zero;
-            private string DisplayedCode = "";
-            private string LastDisplayedCode = "";
+            private string m_displayedCode = "";
+            private string m_lastDisplayedCode = "";
+            private List<string> m_typedCodeHistory = new List<string>(20);
+            private int m_typedCodeIndex = 0;
 
             #endregion
 
@@ -74,7 +78,7 @@ namespace Debugger_For_Unity {
                 int index = 0;
                 foreach (string s in m_debugCodeCustomCodeArray)
                 {
-                    if(s.StartsWith(DisplayedCode, System.StringComparison.CurrentCultureIgnoreCase) || s.Contains(DisplayedCode))
+                    if(s.StartsWith(m_displayedCode, System.StringComparison.CurrentCultureIgnoreCase) || s.Contains(m_displayedCode))
                     {
                         refreshCode[index] = s;
                         index++;
@@ -191,21 +195,21 @@ namespace Debugger_For_Unity {
 
                     //GUILayout.BeginVertical("box");
                     //{
-                        DisplayedCode = GUILayout.TextField(DisplayedCode, 100, GUILayout.Height(25f));
+                        m_displayedCode = GUILayout.TextField(m_displayedCode, 100, GUILayout.Height(25f));
                     //}
                     //GUILayout.EndVertical();
 
-                    if (LastDisplayedCode != DisplayedCode)
+                    if (m_lastDisplayedCode != m_displayedCode)
                     {
                         m_showCodeScroll = true;
-                        LastDisplayedCode = DisplayedCode;
+                        m_lastDisplayedCode = m_displayedCode;
                         RefreshCodeList();
                     }
 
 
                     // dropdown tips
 
-                    if (DisplayedCode != "" && m_showCodeScroll != false)
+                    if (m_displayedCode != "" && m_showCodeScroll != false)
                     {
                         Rect codeDropDownRect = new Rect(0, 0, 200, 20);
 
@@ -217,11 +221,11 @@ namespace Debugger_For_Unity {
                         {
                             if (GUI.Button(new Rect(0, (index * 25), codeDropDownRect.width, 25), ""))
                             {
-                                DisplayedCode = m_matchedCodeArray[index];
+                                m_displayedCode = m_matchedCodeArray[index];
                                 m_showCodeScroll = false;
-                                LastDisplayedCode = DisplayedCode;
+                                m_lastDisplayedCode = m_displayedCode;
                             }
-                            GUI.Label(new Rect(5, (index * 25), codeDropDownRect.width, 25), "<b>" + m_matchedCodeArray[index] + "</b>");
+                            GUI.Label(new Rect(5, (index * 25), codeDropDownRect.width, 25), "<b>" + m_matchedCodeArray[index] + "</b>", m_backGroundStyle);
                         }
                         GUI.EndScrollView();
                     }
@@ -232,21 +236,52 @@ namespace Debugger_For_Unity {
                     //{
                     GUILayout.BeginHorizontal();
                     {
+                        if (GUILayout.Button("<b><-</b>", GUILayout.Width(50f), GUILayout.Height(30f)))
+                        {
+                            if(m_typedCodeIndex>0 && m_typedCodeIndex <= m_typedCodeHistory.Count)
+                            {
+                                m_displayedCode = m_typedCodeHistory[m_typedCodeIndex - 1];
+                                m_typedCodeIndex--;
+                            }
+                            else
+                            {
+                                m_typedCodeIndex = m_typedCodeHistory.Count;
+                            }
+                        }
+                        if (GUILayout.Button("<b>-></b>", GUILayout.Width(50f), GUILayout.Height(30f)))
+                        {
+                            if (m_typedCodeIndex > 0 && m_typedCodeIndex <= m_typedCodeHistory.Count)
+                            {
+                                m_displayedCode = m_typedCodeHistory[m_typedCodeIndex - 1];
+                                m_typedCodeIndex++;
+                            }
+                            else
+                            {
+                                m_typedCodeIndex = m_typedCodeHistory.Count;
+                            }
+                        }
+
                         if (GUILayout.Button("<b>Clear</b>", GUILayout.Width(100f), GUILayout.Height(30f)))
                         {
-                            DisplayedCode = "";
+                            m_displayedCode = "";
+                            m_typedCodeIndex = m_typedCodeHistory.Count;
                         }
+
                         if (GUILayout.Button("<b>Enter</b>", GUILayout.Height(30f)))
                         {
-                            DealWithCustomCode(DisplayedCode);
+                            DealWithCustomCode(m_displayedCode);
                             TextEditor textEditor = new TextEditor();
-                            textEditor.text = DisplayedCode;
+                            textEditor.text = m_displayedCode;
                             textEditor.OnFocus();
                             textEditor.Copy();
-                            DisplayedCode = "";
+                            m_typedCodeHistory.Add(m_displayedCode);
+                            m_typedCodeIndex = m_typedCodeHistory.Count;
+                            m_displayedCode = "";
                         }
                     }
                     GUILayout.EndHorizontal();
+
+
                     //}
                     //GUILayout.EndVertical();
                     #endregion
