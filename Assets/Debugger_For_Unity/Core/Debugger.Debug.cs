@@ -67,6 +67,7 @@ namespace Debugger_For_Unity {
             private Dictionary<int, string> m_debugCodeDescritionDict = new Dictionary<int, string>();
             private string[] m_debugCodeDescriptionArray;
             private string[] m_debugCodeCustomCodeArray;
+            private string[] m_matchedCodeArray = { };
 
             private int m_selectIndexNumber;
             private bool m_selectShow = false;
@@ -74,9 +75,6 @@ namespace Debugger_For_Unity {
             private Vector2 scrollViewCodeVector = Vector2.zero;
             private Vector2 scrollViewSelectVector = Vector2.zero;
 
-            //test, temp
-            private string[] m_codeList = {};
-            private string[] list = { "Drop_Down_Menu", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44" };
             #endregion
 
 
@@ -108,7 +106,7 @@ namespace Debugger_For_Unity {
                         index++;
                     }
                 }
-                m_codeList = refreshCode.Values.ToArray();
+                m_matchedCodeArray = refreshCode.Values.ToArray();
                 UnityEngine.Debug.Log("refresh");
             }
             #endregion
@@ -188,19 +186,19 @@ namespace Debugger_For_Unity {
                     {
                         Rect codeDropDownRect = new Rect(0, 0, 200, 20);
 
-                        scrollViewCodeVector = GUI.BeginScrollView(new Rect(150, 60, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_codeList.Length * 25))), scrollViewCodeVector, new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_codeList.Length * 25))));
+                        scrollViewCodeVector = GUI.BeginScrollView(new Rect(150, 60, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 25))), scrollViewCodeVector, new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 25))));
 
-                        GUI.Box(new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_codeList.Length * 25))), "");
+                        GUI.Box(new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 25))), "");
 
-                        for (int index = 0; index < m_codeList.Length; index++)
+                        for (int index = 0; index < m_matchedCodeArray.Length; index++)
                         {
                             if (GUI.Button(new Rect(0, (index * 25), codeDropDownRect.width, 25), ""))
                             {
-                                DisplayedCode = m_codeList[index];
+                                DisplayedCode = m_matchedCodeArray[index];
                                 m_showCodeScroll = false;
                                 LastDisplayedCode = DisplayedCode;
                             }
-                            GUI.Label(new Rect(5, (index * 25), codeDropDownRect.width, 25), "<b>" + m_codeList[index] + "</b>");
+                            GUI.Label(new Rect(5, (index * 25), codeDropDownRect.width, 25), "<b>" + m_matchedCodeArray[index] + "</b>");
                         }
                         GUI.EndScrollView();
                     }
@@ -256,11 +254,11 @@ namespace Debugger_For_Unity {
                     Rect selectDropDownRect = new Rect(10, 125, 400, 100);
                     if (m_selectShow)
                     {
-                        scrollViewSelectVector = GUI.BeginScrollView(new Rect(selectDropDownRect.x, selectDropDownRect.y + 20, selectDropDownRect.width, selectDropDownRect.height), scrollViewSelectVector, new Rect(0, 0, selectDropDownRect.width - 20, Mathf.Max(selectDropDownRect.height, (list.Length * 25))));
+                        scrollViewSelectVector = GUI.BeginScrollView(new Rect(selectDropDownRect.x, selectDropDownRect.y + 20, selectDropDownRect.width, selectDropDownRect.height), scrollViewSelectVector, new Rect(0, 0, selectDropDownRect.width - 20, Mathf.Max(selectDropDownRect.height, (m_debugSelectDescriptionArray.Length * 25))));
 
-                        GUI.Box(new Rect(0, 0, selectDropDownRect.width, Mathf.Max(selectDropDownRect.height, (list.Length * 25))), "");
+                        GUI.Box(new Rect(0, 0, selectDropDownRect.width, Mathf.Max(selectDropDownRect.height, (m_debugSelectDescriptionArray.Length * 25))), "");
 
-                        for (int index = 0; index < list.Length; index++)
+                        for (int index = 0; index < m_debugSelectDescriptionArray.Length; index++)
                         {
                             if (GUI.Button(new Rect(0, (index * 25), selectDropDownRect.width, 25), ""))
                             {
@@ -268,13 +266,13 @@ namespace Debugger_For_Unity {
                                 m_selectIndexNumber = index;
                             }
 
-                            GUI.Label(new Rect(selectDropDownRect.x, (index * 25), selectDropDownRect.width, 25), list[index]);
+                            GUI.Label(new Rect(selectDropDownRect.x, (index * 25), selectDropDownRect.width, 25), m_debugSelectDescriptionArray[index]);
                         }
                         GUI.EndScrollView();
                     }
                     else
                     {
-                        GUI.Label(new Rect(selectDropDownRect.x, selectDropDownRect.y, selectDropDownRect.width, 25), list[m_selectIndexNumber]);
+                        GUI.Label(new Rect(selectDropDownRect.x, selectDropDownRect.y, selectDropDownRect.width, 25), m_debugSelectDescriptionArray[m_selectIndexNumber]);
                     }
 
                     // enter button

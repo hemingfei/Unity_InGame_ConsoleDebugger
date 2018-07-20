@@ -52,6 +52,7 @@ namespace Debugger_For_Unity {
 
 
         [DebuggerButtonDebug("tt2", 1)]
+        [DebuggerSelectDebug("tt2", 1)]
         [DebuggerCodeDebug("apple", "tt2Code")]
         public void Test2()
         {
@@ -70,6 +71,7 @@ namespace Debugger_For_Unity {
 
         }
 
+        [DebuggerSelectDebug("tt555555", 1)]
         [DebuggerCodeDebug("addddpple", "tt5Cdddode")]
         public void Test5()
         {
