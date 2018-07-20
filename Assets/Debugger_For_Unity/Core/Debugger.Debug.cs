@@ -66,6 +66,7 @@ namespace Debugger_For_Unity {
             private Dictionary<int, string> m_debugCodeCustomCodeDict = new Dictionary<int, string>();
             private Dictionary<int, string> m_debugCodeDescritionDict = new Dictionary<int, string>();
             private string[] m_debugCodeDescriptionArray;
+            private string[] m_debugCodeCustomCodeArray;
 
             private int m_selectIndexNumber;
             private bool m_selectShow = false;
@@ -74,7 +75,7 @@ namespace Debugger_For_Unity {
             private Vector2 scrollViewSelectVector = Vector2.zero;
 
             //test, temp
-            private string[] m_codeList = { "aaa", "bbb", "ccc", "ddd"};
+            private string[] m_codeList = {};
             private string[] list = { "Drop_Down_Menu", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44", "Drop_Down_Menu2", "Drop_Down_Menu33", "Drop_Down_Menu44" };
             #endregion
 
@@ -95,7 +96,21 @@ namespace Debugger_For_Unity {
 
 
             #region Private Methods
-
+            private void RefreshCodeList()
+            {
+                Dictionary<int, string> refreshCode = new Dictionary<int, string>();
+                int index = 0;
+                foreach (string s in m_debugCodeCustomCodeArray)
+                {
+                    if(s.StartsWith(DisplayedCode, System.StringComparison.CurrentCultureIgnoreCase) || s.Contains(DisplayedCode))
+                    {
+                        refreshCode[index] = s;
+                        index++;
+                    }
+                }
+                m_codeList = refreshCode.Values.ToArray();
+                UnityEngine.Debug.Log("refresh");
+            }
             #endregion
 
 
@@ -132,6 +147,7 @@ namespace Debugger_For_Unity {
 
                 m_debugSelectDescriptionArray = m_debugSelectDescritionDict.Values.ToArray();
                 m_debugCodeDescriptionArray = m_debugCodeDescritionDict.Values.ToArray();
+                m_debugCodeCustomCodeArray = m_debugCodeCustomCodeDict.Values.ToArray();
             }
 
             public void OnWindowDestroy()
@@ -162,6 +178,7 @@ namespace Debugger_For_Unity {
                     {
                         m_showCodeScroll = true;
                         LastDisplayedCode = DisplayedCode;
+                        RefreshCodeList();
                     }
 
 

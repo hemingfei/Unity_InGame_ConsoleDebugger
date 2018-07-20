@@ -18,48 +18,78 @@ namespace Debugger_For_Unity {
 	/// </summary>
 	public partial class Debugger
 	{
-		#region  Attributes and Properties
-		/// <summary>
-		/// Public Members
-		/// </summary>
+        #region  Attributes and Properties
+        /// <summary>
+        /// Public Members
+        /// </summary>
 
-		/// <summary>
-		/// Properties
-		/// </summary>
-		
-		/// <summary>
-		/// Protected Members
-		/// </summary>
+        /// <summary>
+        /// Properties
+        /// </summary>
 
-		/// <summary>
-		/// Private Members
-		/// </summary>
-		
-		#endregion
+        /// <summary>
+        /// Protected Members
+        /// </summary>
 
+        /// <summary>
+        /// Private Members
+        /// </summary>
 
-		#region Engine Methods
-        
-		#endregion
+        #endregion
 
 
-		#region Public Methods
+        #region Engine Methods
 
-		#endregion
+        #endregion
 
 
-		#region Protected Methods
-		
-		#endregion
-		
+        #region Public Methods
+        [DebuggerButtonDebug("tt1", 1)]
+        public void Test1()
+        {
 
-		#region Private Methods
-		
-		#endregion
+        }
 
-		
-		#region Static Methods
-		
-		#endregion
-	}
+
+        [DebuggerButtonDebug("tt2", 1)]
+        [DebuggerCodeDebug("apple", "tt2Code")]
+        public void Test2()
+        {
+
+        }
+
+        [DebuggerButtonDebug("tt3", 1)]
+        public void Test3()
+        {
+
+        }
+
+        [DebuggerCodeDebug("apple666", "tt4Codeddd")]
+        public void Test4()
+        {
+
+        }
+
+        [DebuggerCodeDebug("addddpple", "tt5Cdddode")]
+        public void Test5()
+        {
+
+        }
+        #endregion
+
+
+        #region Protected Methods
+
+        #endregion
+
+
+        #region Private Methods
+
+        #endregion
+
+
+        #region Static Methods
+
+        #endregion
+    }
 }
