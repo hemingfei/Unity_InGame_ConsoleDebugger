@@ -47,7 +47,6 @@ namespace Debugger_For_Unity {
                 {
                     if (value <= 0f)
                     {
-                        Debug.LogError("Update interval should be positive value. Current is " + value);
                         return;
                     }
                     m_refreshInterval = value;

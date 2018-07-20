@@ -143,8 +143,8 @@ namespace Debugger_For_Unity {
         /// <summary>
         /// Select the window or window groups
         /// </summary>
-        /// <param name="path">调试窗口路径。</param>
-        /// <returns>是否成功选中调试窗口。</returns>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public bool SelectWindow(string path)
         {
             if (string.IsNullOrEmpty(path))

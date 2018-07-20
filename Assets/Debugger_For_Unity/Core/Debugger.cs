@@ -70,15 +70,18 @@ namespace Debugger_For_Unity
         [SerializeField]
         private Console m_console = new Console();
 
+        [SerializeField]
+        private Debug m_debug = new Debug();
+
         /// <summary>
         /// Properties
         /// </summary>
-        
+
         public bool ShowFullWindow { get; set; } //= false;
 
         public Rect IconRect { get; set; }
 
-        public Rect WindowRect { get; set; }
+        public static Rect WindowRect { get; set; }
 
         public float WindowScale { get; set; } //= 1;
         #endregion
@@ -114,7 +117,8 @@ namespace Debugger_For_Unity
         private void Start()
         {
             // register the windows
-            RegisterDebuggerWindow("Console", m_console);     
+            RegisterDebuggerWindow("Console", m_console);
+            RegisterDebuggerWindow("Debug", m_debug);
         }
 
         private void Update()
