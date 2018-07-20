@@ -317,12 +317,17 @@ namespace Debugger_For_Unity {
                     //
 
                     GUILayout.Label("<b>Button</b>");
-
-                    int lines = m_debugButtonMethodNum / m_numberOfButtonsPerLine + 1;
-                    if(m_debugButtonMethodNum == 0)
+                    int lines;
+                    if (m_debugButtonMethodNum % m_numberOfButtonsPerLine > 0)
                     {
-                        lines = 0;
+                        lines = m_debugButtonMethodNum / m_numberOfButtonsPerLine + 1;
                     }
+                    else
+                    {
+                        lines = m_debugButtonMethodNum / m_numberOfButtonsPerLine;
+                    }
+                     
+
                     for (int i = 0; i < lines; i++)
                     {
                         GUILayout.BeginVertical("box");
