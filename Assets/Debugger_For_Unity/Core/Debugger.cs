@@ -119,6 +119,7 @@ namespace Debugger_For_Unity
             // register the windows
             RegisterDebuggerWindow("Console", m_console);
             RegisterDebuggerWindow("Debug", m_debug);
+            m_debug.Debugger = this;
         }
 
         private void Update()

@@ -25,21 +25,7 @@ namespace Debugger_For_Unity {
         private sealed class Debug : IWindow
         {
             #region  Attributes and Properties
-            /// <summary>
-            /// Public Members
-            /// </summary>
-            public string DisplayedCode = "";
-
-            public string LastDisplayedCode = "";
-
-            bool m_showCodeScroll = false;
-            /// <summary>
-            /// Properties
-            /// </summary>
-
-            /// <summary>
-            /// Protected Members
-            /// </summary>
+            public Debugger Debugger { get; set; }
 
             /// <summary>
             /// Private Members
@@ -59,6 +45,9 @@ namespace Debugger_For_Unity {
             private Dictionary<int, string> m_debugSelectMethodDict = new Dictionary<int, string>();
             private Dictionary<int, string> m_debugSelectDescritionDict = new Dictionary<int, string>();
             private string[] m_debugSelectDescriptionArray;
+            private int m_selectIndexNumber;
+            private bool m_selectShow = false;
+            private Vector2 scrollViewSelectVector = Vector2.zero;
 
             // code debug
             private int m_debugCodeMethodNum = 0;
@@ -68,32 +57,17 @@ namespace Debugger_For_Unity {
             private string[] m_debugCodeDescriptionArray;
             private string[] m_debugCodeCustomCodeArray;
             private string[] m_matchedCodeArray = { };
-
-            private int m_selectIndexNumber;
-            private bool m_selectShow = false;
-
+            private bool m_showCodeScroll = false;
             private Vector2 scrollViewCodeVector = Vector2.zero;
-            private Vector2 scrollViewSelectVector = Vector2.zero;
+            private string DisplayedCode = "";
+            private string LastDisplayedCode = "";
 
             #endregion
-
-
-            #region Engine Methods
-
-            #endregion
-
-
-            #region Public Methods
-
-            #endregion
-
-
-            #region Protected Methods
-
-            #endregion
-
 
             #region Private Methods
+            /// <summary>
+            /// refresh the matched input code to give tips
+            /// </summary>
             private void RefreshCodeList()
             {
                 Dictionary<int, string> refreshCode = new Dictionary<int, string>();
@@ -107,7 +81,60 @@ namespace Debugger_For_Unity {
                     }
                 }
                 m_matchedCodeArray = refreshCode.Values.ToArray();
-                UnityEngine.Debug.Log("refresh");
+            }
+
+            /// <summary>
+            /// check the code, prepare to invoke
+            /// </summary>
+            /// <param name="code"></param>
+            private void DealWithCustomCode(string code)
+            {
+                code = code.Trim();
+                string[] ss = System.Text.RegularExpressions.Regex.Split(code, @"\s+");
+                int codeSplitParamNum = ss.Length;
+                if (codeSplitParamNum <= 0 || ss[0] == "")
+                {
+                    return;
+                }
+                if (!m_debugCodeCustomCodeDict.Values.Contains(ss[0]))
+                {
+                    UnityEngine.Debug.Log("No Such Code");
+                    return;
+                }
+                int key = m_debugCodeCustomCodeDict.FirstOrDefault(x => x.Value == ss[0]).Key;
+                MethodInfo method = typeof(Debugger).GetMethod(m_debugCodeMethodDict[key]);
+                if (codeSplitParamNum != (method.GetParameters().Length + 1))
+                {
+                    UnityEngine.Debug.Log("Wrong Code, Reason: Number of Parameters");
+                    return;
+                }
+                string[] param = new string[codeSplitParamNum - 1];
+                for (int i = 0; i < (codeSplitParamNum - 1); i++)
+                {
+                    param[i] = ss[i + 1];
+                }
+                UnityEngine.Debug.Log("Apply Code: [" + code + "] Successful.");
+                method.Invoke(Debugger, param);
+            }
+
+            private void DealWithSelect(int index)
+            {
+                MethodInfo method = typeof(Debugger).GetMethod(m_debugSelectMethodDict[index]);
+                if(method.GetParameters().Length > 0)
+                {
+                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters");
+                }
+                method.Invoke(Debugger, null);
+            }
+
+            private void DealWithButton(int index)
+            {
+                MethodInfo method = typeof(Debugger).GetMethod(m_debugButtonMethodDict[index]);
+                if (method.GetParameters().Length > 0)
+                {
+                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters");
+                }
+                method.Invoke(Debugger, null);
             }
             #endregion
 
@@ -148,10 +175,6 @@ namespace Debugger_For_Unity {
                 m_debugCodeCustomCodeArray = m_debugCodeCustomCodeDict.Values.ToArray();
             }
 
-            public void OnWindowDestroy()
-            {
-                
-            }
 
             public void OnWindowDraw()
             {
@@ -215,7 +238,7 @@ namespace Debugger_For_Unity {
                         }
                         if (GUILayout.Button("<b>Enter</b>", GUILayout.Height(30f)))
                         {
-                            //DealWithCustomCheatCode(DisplayedCode);
+                            DealWithCustomCode(DisplayedCode);
                             TextEditor textEditor = new TextEditor();
                             textEditor.text = DisplayedCode;
                             textEditor.OnFocus();
@@ -281,7 +304,7 @@ namespace Debugger_For_Unity {
                     {
                         if (GUILayout.Button("<b>Enter</b>", GUILayout.Height(30f)))
                         {
-                            //DealWithCustomCheatCode(DisplayedCode);
+                            DealWithSelect(m_selectIndexNumber);
 
                         }
                     }
@@ -312,7 +335,7 @@ namespace Debugger_For_Unity {
                                     {
                                         if (GUILayout.Button(m_debugButtonDescritionDict[m_numberOfButtonsPerLine * i + j], GUILayout.Width(100f), GUILayout.Height(30f)))
                                         {
-                                            //SendMessage(Dict[numPerLine * i + j]);
+                                            DealWithButton(m_numberOfButtonsPerLine * i + j);
                                         }
                                         GUILayout.Label("", GUILayout.Width(10f));
                                     }
@@ -325,6 +348,11 @@ namespace Debugger_For_Unity {
                     #endregion
                 }
                 GUILayout.EndScrollView();
+            }
+
+            public void OnWindowDestroy()
+            {
+
             }
 
             public void OnWindowEnter()

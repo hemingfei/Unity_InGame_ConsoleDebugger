@@ -18,30 +18,6 @@ namespace Debugger_For_Unity {
 	/// </summary>
 	public partial class Debugger
 	{
-        #region  Attributes and Properties
-        /// <summary>
-        /// Public Members
-        /// </summary>
-
-        /// <summary>
-        /// Properties
-        /// </summary>
-
-        /// <summary>
-        /// Protected Members
-        /// </summary>
-
-        /// <summary>
-        /// Private Members
-        /// </summary>
-
-        #endregion
-
-
-        #region Engine Methods
-
-        #endregion
-
 
         #region Public Methods
         [DebuggerButtonDebug("tt1", 1)]
@@ -54,9 +30,9 @@ namespace Debugger_For_Unity {
         [DebuggerButtonDebug("tt2", 1)]
         [DebuggerSelectDebug("tt2", 1)]
         [DebuggerCodeDebug("apple", "tt2Code")]
-        public void Test2()
+        public void Test2(string a, string bb)
         {
-
+            UnityEngine.Debug.Log("TEST222");
         }
 
         [DebuggerButtonDebug("tt3", 1)]
@@ -70,23 +46,13 @@ namespace Debugger_For_Unity {
         {
 
         }
-
+        [DebuggerButtonDebug("tt5", 1)]
         [DebuggerSelectDebug("tt555555", 1)]
         [DebuggerCodeDebug("addddpple", "tt5Cdddode")]
         public void Test5()
         {
-
+            UnityEngine.Debug.Log("TEST555");
         }
-        #endregion
-
-
-        #region Protected Methods
-
-        #endregion
-
-
-        #region Private Methods
-
         #endregion
 
 
