@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -108,25 +109,54 @@ namespace Debugger_For_Unity
                 }
                 if (!m_debugCodeCustomCodeDict.Values.Contains(ss[0]))
                 {
-                    UnityEngine.Debug.Log("No Such Code");
                     m_inputAnswer = "No Such Code";
+                    UnityEngine.Debug.Log(m_inputAnswer);
                     return;
                 }
                 int key = m_debugCodeCustomCodeDict.FirstOrDefault(x => x.Value == ss[0]).Key;
                 MethodInfo method = typeof(Debugger).GetMethod(m_debugCodeMethodDict[key]);
                 if (codeSplitParamNum != (method.GetParameters().Length + 1))
                 {
-                    UnityEngine.Debug.Log("Wrong Code, Reason: Number of Parameters");
                     m_inputAnswer = "Wrong Code, Reason: Number of Parameters";
+                    UnityEngine.Debug.Log(m_inputAnswer);
                     return;
                 }
-                string[] param = new string[codeSplitParamNum - 1];
+                object[] param = new object[codeSplitParamNum - 1];
+                ParameterInfo[] parametersInfo = method.GetParameters();
                 for (int i = 0; i < (codeSplitParamNum - 1); i++)
                 {
-                    param[i] = ss[i + 1];
+                    try
+                    {
+                        TypeConverter typeConverter = TypeDescriptor.GetConverter(parametersInfo[i].ParameterType);
+                        param[i] = typeConverter.ConvertFromString(ss[i + 1]);
+                    }
+                    catch(Exception e)
+                    {
+                        string trail;
+                        switch (i + 1)
+                        {
+                            case 1:
+                                trail = "st";
+                                break;
+                            case 2:
+                                trail = "nd";
+                                break;
+                            case 3:
+                                trail = "rd";
+                                break;
+                            default:
+                                trail = "th";
+                                break;
+                        }
+
+                        m_inputAnswer = String.Format("The {0}{1} parameter should be {2}", i + 1, trail, parametersInfo[i].ParameterType);
+                        UnityEngine.Debug.Log(m_inputAnswer);
+                        UnityEngine.Debug.LogWarning("Exception is : " + e);
+                        return;
+                    }
                 }
-                UnityEngine.Debug.Log("Apply Code: [" + code + "] Successful.");
                 m_inputAnswer = "Apply Code: [" + code + "] Successful.";
+                UnityEngine.Debug.Log(m_inputAnswer);
                 method.Invoke(Debugger, param);
             }
             #endregion
