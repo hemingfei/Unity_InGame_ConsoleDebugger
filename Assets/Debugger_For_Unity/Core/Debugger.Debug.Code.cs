@@ -62,10 +62,6 @@ namespace Debugger_For_Unity
             private string m_inputAnswer = "";
             #endregion
 
-            public Code(Debug debug)
-            {
-                this.Debug = debug;
-            }
             public Code()
             {
 

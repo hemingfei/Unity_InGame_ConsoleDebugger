@@ -60,7 +60,8 @@ namespace Debugger_For_Unity
                 MethodInfo method = typeof(Debugger).GetMethod(m_debugButtonMethodDict[index]);
                 if (method.GetParameters().Length > 0)
                 {
-                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters");
+                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters, should no be registered as button, RETURN.");
+                    return;
                 }
                 method.Invoke(Debugger, null);
             }

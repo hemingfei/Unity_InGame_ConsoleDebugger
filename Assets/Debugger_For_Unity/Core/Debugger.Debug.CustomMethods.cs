@@ -117,9 +117,5 @@ namespace Debugger_For_Unity {
         }
         #endregion
 
-
-        #region Static Methods
-
-        #endregion
     }
 }

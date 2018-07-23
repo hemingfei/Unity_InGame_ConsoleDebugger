@@ -48,13 +48,13 @@ namespace Debugger_For_Unity
         /// Size
         /// </summary>
         
-        //private static Rect DefaultIconRect = new Rect(0f, 0f, 50f, 50f); // size of the icon
+        private static readonly Rect DefaultIconRect = new Rect(0f, 0f, 50f, 50f); // size of the icon
 
         private static readonly Rect DefaultDragRect = new Rect(0f, 0f, float.MaxValue, 20); // size of the drag area, set it full
 
-        //private static Rect DefaultWindowRect = new Rect(10f, 10f, 640f, 480f); // size of window
+        private static Rect DefaultWindowRect = new Rect(0, 0, 640, 380); // size of window
 
-        //private static float DefaultWindowScale = 1f; // scale size of icon and window
+        private static float DefaultWindowScale = 1f; // scale size of icon and window
 
         /// <summary>
         /// Windows
@@ -63,6 +63,8 @@ namespace Debugger_For_Unity
         private DebuggerManager m_debuggerManager = new DebuggerManager();
 
         private float m_uiAdaptiveScale = 1;
+
+        private Vector2 m_resolution;
 
         [SerializeField]
         private Fps m_fps = new Fps();
@@ -85,6 +87,9 @@ namespace Debugger_For_Unity
         [SerializeField]
         private Billboard m_billboard = new Billboard();
 
+        [SerializeField]
+        private WindowSize m_windowSize = new WindowSize();
+
         /// <summary>
         /// Properties
         /// </summary>
@@ -93,7 +98,7 @@ namespace Debugger_For_Unity
 
         public Rect IconRect { get; set; }
 
-        public static Rect WindowRect { get; set; }
+        public Rect WindowRect { get; set; }
 
         public float WindowScale { get; set; } //= 1;
         #endregion
@@ -102,16 +107,20 @@ namespace Debugger_For_Unity
         private void Awake()
         {
             // give default values here (C# 4)
-            WindowScale = m_initWindowScale;
+            DefaultWindowScale = m_initWindowScale;
+
+            WindowScale = DefaultWindowScale;
 
             ShowFullWindow = false;
 
-            IconRect = new Rect(0, 0, 50, 50);
+            IconRect = DefaultIconRect;
 
-            WindowRect = new Rect(0, 0, 200, 100);
+            WindowRect = DefaultWindowRect;
 
             // UI adaptive
             m_uiAdaptiveScale = (Screen.width / 960.0f); // using 960 * 540 as default native resolution
+
+            m_resolution = new Vector2(Screen.width, Screen.height);
 
             // check drag items
             if (m_maskCanvas == null)
@@ -133,16 +142,27 @@ namespace Debugger_For_Unity
             m_code.Debugger = this;
             m_select.Debugger = this;
             m_button.Debugger = this;
+            m_windowSize.Debugger = this;
             RegisterDebuggerWindow("Debug/Code", m_code);
             RegisterDebuggerWindow("Debug/Select", m_select);
             RegisterDebuggerWindow("Debug/Button", m_button);
             RegisterDebuggerWindow("Billboard", m_billboard);
+            RegisterDebuggerWindow("Window", m_windowSize);
         }
 
         private void Update()
         {
             // update fps, the unscaledDeltaTime is used
             m_fps.Update(Time.deltaTime, Time.unscaledDeltaTime);
+
+            // check resolution change
+            if (m_resolution.x != Screen.width || m_resolution.y != Screen.height)
+            {
+                m_uiAdaptiveScale = (Screen.width / 960.0f);
+
+                m_resolution.x = Screen.width;
+                m_resolution.y = Screen.height;
+            }
         }
 
         private void OnGUI()
