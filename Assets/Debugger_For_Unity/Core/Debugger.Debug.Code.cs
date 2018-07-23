@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Debugger_For_Unity
@@ -38,9 +39,11 @@ namespace Debugger_For_Unity
 
             // code debug
             [SerializeField]
-            public GUIStyle m_codeBackGroundStyle = null;
+            private GUIStyle m_codeBackGroundStyle = null;
             [SerializeField]
-            public GUIStyle m_descriptionBackGroundStyle = null;
+            private GUIStyle m_descriptionBackGroundStyle = null;
+            [SerializeField]
+            private GUIStyle m_inputAnswerStyle = null;
             private int m_debugCodeMethodNum = 0;
             private Dictionary<int, string> m_debugCodeMethodDict = new Dictionary<int, string>();
             private Dictionary<int, string> m_debugCodeCustomCodeDict = new Dictionary<int, string>();
@@ -55,7 +58,7 @@ namespace Debugger_For_Unity
             private string m_lastDisplayedCode = "";
             private List<string> m_typedCodeHistory = new List<string>(20);
             private int m_typedCodeIndex = 0;
-
+            private string m_inputAnswer = "";
             #endregion
 
             public Code(Debug debug)
@@ -106,6 +109,7 @@ namespace Debugger_For_Unity
                 if (!m_debugCodeCustomCodeDict.Values.Contains(ss[0]))
                 {
                     UnityEngine.Debug.Log("No Such Code");
+                    m_inputAnswer = "No Such Code";
                     return;
                 }
                 int key = m_debugCodeCustomCodeDict.FirstOrDefault(x => x.Value == ss[0]).Key;
@@ -113,6 +117,7 @@ namespace Debugger_For_Unity
                 if (codeSplitParamNum != (method.GetParameters().Length + 1))
                 {
                     UnityEngine.Debug.Log("Wrong Code, Reason: Number of Parameters");
+                    m_inputAnswer = "Wrong Code, Reason: Number of Parameters";
                     return;
                 }
                 string[] param = new string[codeSplitParamNum - 1];
@@ -121,6 +126,7 @@ namespace Debugger_For_Unity
                     param[i] = ss[i + 1];
                 }
                 UnityEngine.Debug.Log("Apply Code: [" + code + "] Successful.");
+                m_inputAnswer = "Apply Code: [" + code + "] Successful.";
                 method.Invoke(Debugger, param);
             }
             #endregion
@@ -138,8 +144,14 @@ namespace Debugger_For_Unity
                         if (attr is DebuggerCodeDebugAttribute)
                         {
                             m_debugCodeMethodDict.Add(m_debugCodeMethodNum, method.Name);
-                            m_debugCodeCustomCodeDict.Add(m_debugCodeMethodNum, ((DebuggerCodeDebugAttribute)attr).CustomCode);
-                            m_debugCodeDescritionDict.Add(m_debugCodeMethodNum, ((DebuggerCodeDebugAttribute)attr).Description);
+
+                            string code = ((DebuggerCodeDebugAttribute)attr).CustomCode;
+                            code = new Regex("[\\s]+").Replace(code, "_");
+                            m_debugCodeCustomCodeDict.Add(m_debugCodeMethodNum, code);
+
+                            string des = ((DebuggerCodeDebugAttribute)attr).Description;
+                            //des = new Regex("[\\s]+").Replace(des, "_");
+                            m_debugCodeDescritionDict.Add(m_debugCodeMethodNum, des);
                             m_debugCodeMethodNum++;
                         }
                     }
@@ -236,6 +248,7 @@ namespace Debugger_For_Unity
                         {
                             m_displayedCode = "";
                             m_typedCodeIndex = m_typedCodeHistory.Count;
+                            m_inputAnswer = "";
                         }
 
                         if (GUILayout.Button("<b>Enter</b>", GUILayout.Height(30f)))
@@ -251,7 +264,7 @@ namespace Debugger_For_Unity
                         }
                     }
                     GUILayout.EndHorizontal();
-
+                    GUI.Label(new Rect(220, 10, 100, 25), String.Format("{0}", m_inputAnswer), m_inputAnswerStyle);
 
                     //}
                     //GUILayout.EndVertical();
