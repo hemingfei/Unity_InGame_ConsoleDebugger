@@ -82,6 +82,9 @@ namespace Debugger_For_Unity
         [SerializeField]
         private Button m_button = new Button();
 
+        [SerializeField]
+        private Billboard m_billboard = new Billboard();
+
         /// <summary>
         /// Properties
         /// </summary>
@@ -133,7 +136,7 @@ namespace Debugger_For_Unity
             RegisterDebuggerWindow("Debug/Code", m_code);
             RegisterDebuggerWindow("Debug/Select", m_select);
             RegisterDebuggerWindow("Debug/Button", m_button);
-            
+            RegisterDebuggerWindow("Billboard", m_billboard);
         }
 
         private void Update()
