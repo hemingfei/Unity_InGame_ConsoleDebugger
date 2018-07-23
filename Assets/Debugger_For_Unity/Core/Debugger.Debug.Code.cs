@@ -96,8 +96,6 @@ namespace Debugger_For_Unity
             /// <param name="code"></param>
             private void DealWithCustomCode(string code)
             {
-                UnityEngine.Debug.Log("DealWithCustomCode : " + code);
-                UnityEngine.Debug.Log("m_debugCodeCustomCodeDict count : " + m_debugCodeCustomCodeDict.Values.Count);
                 code = code.Trim();
                 string[] ss = System.Text.RegularExpressions.Regex.Split(code, @"\s+");
                 int codeSplitParamNum = ss.Length;

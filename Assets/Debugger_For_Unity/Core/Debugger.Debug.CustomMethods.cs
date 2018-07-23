@@ -29,7 +29,7 @@ namespace Debugger_For_Unity {
 
         [DebuggerButtonDebug("test2", 1)]
         [DebuggerSelectDebug("test2 select", 1)]
-        [DebuggerCodeDebug("test2 code", "test2 description")]
+        [DebuggerCodeDebug("test2code", "test2 description")]
         public void Test2(string a, string bb)
         {
             UnityEngine.Debug.Log("TEST2 LOG");
@@ -41,14 +41,14 @@ namespace Debugger_For_Unity {
             UnityEngine.Debug.Log("TEST3 LOG");
         }
 
-        [DebuggerCodeDebug("test4 code", "test4 description")]
+        [DebuggerCodeDebug("test4code", "test4 description")]
         public void Test4()
         {
             UnityEngine.Debug.Log("TEST4 LOG");
         }
         [DebuggerButtonDebug("test5", 1)]
         [DebuggerSelectDebug("test5 select", 1)]
-        [DebuggerCodeDebug("test5 code", "test5 description")]
+        [DebuggerCodeDebug("test5code", "test5 description")]
         public void Test5()
         {
             UnityEngine.Debug.Log("TEST5 LOG");
