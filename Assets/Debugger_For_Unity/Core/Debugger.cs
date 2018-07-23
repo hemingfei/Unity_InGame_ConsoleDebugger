@@ -48,13 +48,13 @@ namespace Debugger_For_Unity
         /// Size
         /// </summary>
         
-        private static Rect DefaultIconRect = new Rect(0f, 0f, 50f, 50f); // size of the icon
+        //private static Rect DefaultIconRect = new Rect(0f, 0f, 50f, 50f); // size of the icon
 
         private static readonly Rect DefaultDragRect = new Rect(0f, 0f, float.MaxValue, 20); // size of the drag area, set it full
 
-        private static Rect DefaultWindowRect = new Rect(10f, 10f, 640f, 480f); // size of window
+        //private static Rect DefaultWindowRect = new Rect(10f, 10f, 640f, 480f); // size of window
 
-        private static float DefaultWindowScale = 1f; // scale size of icon and window
+        //private static float DefaultWindowScale = 1f; // scale size of icon and window
 
         /// <summary>
         /// Windows
@@ -70,8 +70,17 @@ namespace Debugger_For_Unity
         [SerializeField]
         private Console m_console = new Console();
 
+        //[SerializeField]
+        //private Debug m_debug = new Debug();
+
         [SerializeField]
-        private Debug m_debug = new Debug();
+        private Code  m_code = new Code();
+
+        [SerializeField]
+        private Select m_select = new Select();
+
+        [SerializeField]
+        private Button m_button = new Button();
 
         /// <summary>
         /// Properties
@@ -118,8 +127,13 @@ namespace Debugger_For_Unity
         {
             // register the windows
             RegisterDebuggerWindow("Console", m_console);
-            RegisterDebuggerWindow("Debug", m_debug);
-            m_debug.Debugger = this;
+            m_code.Debugger = this;
+            m_select.Debugger = this;
+            m_button.Debugger = this;
+            RegisterDebuggerWindow("Debug/Code", m_code);
+            RegisterDebuggerWindow("Debug/Select", m_select);
+            RegisterDebuggerWindow("Debug/Button", m_button);
+            
         }
 
         private void Update()

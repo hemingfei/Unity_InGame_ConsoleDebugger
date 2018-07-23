@@ -20,38 +20,38 @@ namespace Debugger_For_Unity {
 	{
 
         #region Public Methods
-        [DebuggerButtonDebug("tt1", 1)]
+        [DebuggerButtonDebug("test1", 1)]
         public void Test1()
         {
-
+            UnityEngine.Debug.Log("TEST1 LOG");
         }
 
 
-        [DebuggerButtonDebug("tt2", 1)]
-        [DebuggerSelectDebug("tt2", 1)]
-        [DebuggerCodeDebug("apple", "tt2Code")]
+        [DebuggerButtonDebug("test2", 1)]
+        [DebuggerSelectDebug("test2 select", 1)]
+        [DebuggerCodeDebug("test2 code", "test2 description")]
         public void Test2(string a, string bb)
         {
-            UnityEngine.Debug.Log("TEST222");
+            UnityEngine.Debug.Log("TEST2 LOG");
         }
 
-        [DebuggerButtonDebug("tt3", 1)]
+        [DebuggerButtonDebug("test3", 1)]
         public void Test3()
         {
-
+            UnityEngine.Debug.Log("TEST3 LOG");
         }
 
-        [DebuggerCodeDebug("apple666", "tt4Codeddd")]
+        [DebuggerCodeDebug("test4 code", "test4 description")]
         public void Test4()
         {
-
+            UnityEngine.Debug.Log("TEST4 LOG");
         }
-        [DebuggerButtonDebug("tt5", 1)]
-        [DebuggerSelectDebug("tt555555", 1)]
-        [DebuggerCodeDebug("addddpple", "tt5Cdddode")]
+        [DebuggerButtonDebug("test5", 1)]
+        [DebuggerSelectDebug("test5 select", 1)]
+        [DebuggerCodeDebug("test5 code", "test5 description")]
         public void Test5()
         {
-            UnityEngine.Debug.Log("TEST555");
+            UnityEngine.Debug.Log("TEST5 LOG");
         }
         #endregion
 
