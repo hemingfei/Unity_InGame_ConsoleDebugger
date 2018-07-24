@@ -8,18 +8,18 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1443752787897244}
-  m_IsPrefabAsset: 1
---- !u!1 &1443752787897244
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1152457885343594}
+  m_IsPrefabParent: 1
+--- !u!1 &1152457885343594
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
+  serializedVersion: 5
   m_Component:
-  - component: {fileID: 4221157385980680}
-  - component: {fileID: 114715682525624640}
+  - component: {fileID: 4948748343495870}
+  - component: {fileID: 114837334345110228}
   m_Layer: 0
   m_Name: Debugger
   m_TagString: Untagged
@@ -27,12 +27,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4221157385980680
+--- !u!4 &4948748343495870
 Transform:
   m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1443752787897244}
+  m_GameObject: {fileID: 1152457885343594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,12 +40,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114715682525624640
+--- !u!114 &114837334345110228
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1443752787897244}
+  m_GameObject: {fileID: 1152457885343594}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4adfacca2672d5f43a7a946a66c4276a, type: 3}
@@ -134,7 +134,7 @@ MonoBehaviour:
       m_Normal:
         m_Background: {fileID: 0}
         m_ScaledBackgrounds: []
-        m_TextColor: {r: 0.6226415, g: 0.5844607, b: 0.5844607, a: 1}
+        m_TextColor: {r: 0.8088235, g: 0.8088235, b: 0.8088235, a: 1}
       m_Hover:
         m_Background: {fileID: 0}
         m_ScaledBackgrounds: []
@@ -201,7 +201,7 @@ MonoBehaviour:
       m_Normal:
         m_Background: {fileID: 0}
         m_ScaledBackgrounds: []
-        m_TextColor: {r: 0.7735849, g: 0.748042, b: 0.748042, a: 1}
+        m_TextColor: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
       m_Hover:
         m_Background: {fileID: 0}
         m_ScaledBackgrounds: []
