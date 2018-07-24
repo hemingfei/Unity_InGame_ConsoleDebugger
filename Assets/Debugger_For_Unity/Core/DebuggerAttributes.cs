@@ -15,53 +15,65 @@ using UnityEngine;
 namespace Debugger_For_Unity {
 
     /// <summary>
-    /// Button
+    /// Button Attribute
     /// </summary>
     public class DebuggerButtonDebugAttribute : Attribute
     {
+        #region  Attributes and Properties
         public string Description { get; private set; }
 
         public int Priority { get; private set; }
+        #endregion
 
-        public DebuggerButtonDebugAttribute(string descrition, int priority = 0)
+        #region Public Methods
+        public DebuggerButtonDebugAttribute(string description, int priority = 0)
         {
-            this.Description = descrition;
+            this.Description = description;
             this.Priority = priority;
         }
+        #endregion
     }
 
     /// <summary>
-    /// Select
+    /// Select Attribute
     /// </summary>
     public class DebuggerSelectDebugAttribute : Attribute
     {
+        #region  Attributes and Properties
         public string Description { get; private set; }
 
         public int Priority { get; private set; }
+        #endregion
 
-        public DebuggerSelectDebugAttribute(string descrition, int priority = 0)
+        #region Public Methods
+        public DebuggerSelectDebugAttribute(string description, int priority = 0)
         {
-            this.Description = descrition;
+            this.Description = description;
             this.Priority = priority;
         }
+        #endregion
     }
 
     /// <summary>
-    /// Code
+    /// Code Attribute
     /// </summary>
     public class DebuggerCodeDebugAttribute : Attribute
     {
+        #region  Attributes and Properties
         public string CustomCode { get; set; }
 
         public string Description { get; private set; }
 
         public int Priority { get; private set; }
+        #endregion
 
-        public DebuggerCodeDebugAttribute(string customCode, string descrition, int priority = 0)
+        #region Public Methods
+        public DebuggerCodeDebugAttribute(string customCode, string description, int priority = 0)
         {
             this.CustomCode = customCode;
-            this.Description = descrition;
+            this.Description = description;
             this.Priority = priority;
         }
+        #endregion
     }
 }

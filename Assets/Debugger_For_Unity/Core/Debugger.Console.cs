@@ -15,7 +15,7 @@ using UnityEngine;
 namespace Debugger_For_Unity {
 
     /// <summary>
-    /// Partial Class
+    /// Partial Class, console widow
     /// </summary>
     public partial class Debugger
 	{

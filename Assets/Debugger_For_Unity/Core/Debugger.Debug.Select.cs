@@ -18,7 +18,7 @@ namespace Debugger_For_Unity
 {
 
     /// <summary>
-    /// Class Explanation
+    /// partial calss, select window
     /// </summary>
     public partial class Debugger
     {
@@ -27,7 +27,6 @@ namespace Debugger_For_Unity
         public class Select : IWindow
         {
             #region  Attributes and Properties
-            //public Debugger Debugger { get; set; }
             public Debug Debug { get; set; }
             public Debugger Debugger { get; set; }
             /// <summary>
@@ -46,11 +45,13 @@ namespace Debugger_For_Unity
             private int m_selectIndexNumber;
             private bool m_selectShow = false;
             private Vector2 scrollViewSelectVector = Vector2.zero;
-
             #endregion
 
-
             #region Private Methods
+            /// <summary>
+            /// invoke custom methods
+            /// </summary>
+            /// <param name="index"></param>
             private void DealWithSelect(int index)
             {
                 MethodInfo method = typeof(Debugger).GetMethod(m_debugSelectMethodDict[index]);
@@ -63,6 +64,11 @@ namespace Debugger_For_Unity
             }
             #endregion
 
+            #region Public Methods
+            /// <summary>
+            /// Constructors
+            /// </summary>
+            /// <param name="debug"></param>
             public Select(Debug debug)
             {
                 this.Debug = debug;
@@ -72,6 +78,7 @@ namespace Debugger_For_Unity
             {
 
             }
+            #endregion
 
             #region Interface Public Methods
             public void OnWindowAwake(params object[] args)
@@ -120,7 +127,6 @@ namespace Debugger_For_Unity
 
                 m_debugSelectDescriptionArray = m_debugSelectDescritionDict.Values.ToArray();
             }
-
 
             public void OnWindowDraw()
             {

@@ -15,7 +15,7 @@ using UnityEngine;
 namespace Debugger_For_Unity {
 
 	/// <summary>
-	/// Class Explanation
+	/// partial class of debugger, window size window, change the size of windows
 	/// </summary>
 	public partial class Debugger
 	{
@@ -129,6 +129,7 @@ namespace Debugger_For_Unity {
                         }
                         GUILayout.EndHorizontal();
 
+                        // buttons change scale directly
 
                         GUILayout.BeginHorizontal();
                         {

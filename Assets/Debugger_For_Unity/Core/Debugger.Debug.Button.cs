@@ -18,16 +18,14 @@ namespace Debugger_For_Unity
 {
 
     /// <summary>
-    /// Class Explanation
+    /// Partial clsss, button window
     /// </summary>
     public partial class Debugger
     {
-
         [Serializable]
         public class Button : IWindow
         {
             #region  Attributes and Properties
-            //public Debugger Debugger { get; set; }
             public Debug Debug { get; set; }
             public Debugger Debugger { get; set; }
             /// <summary>
@@ -45,6 +43,11 @@ namespace Debugger_For_Unity
 
             #endregion
 
+            #region Public Methods
+            /// <summary>
+            /// constructors
+            /// </summary>
+            /// <param name="debug"></param>
             public Button(Debug debug)
             {
                 this.Debug = debug;
@@ -53,8 +56,13 @@ namespace Debugger_For_Unity
             {
 
             }
+            #endregion
 
             #region Private Methods
+            /// <summary>
+            /// invode custom methods
+            /// </summary>
+            /// <param name="index"></param>
             private void DealWithButton(int index)
             {
                 MethodInfo method = typeof(Debugger).GetMethod(m_debugButtonMethodDict[index]);
@@ -66,7 +74,6 @@ namespace Debugger_For_Unity
                 method.Invoke(Debugger, null);
             }
             #endregion
-
 
             #region Interface Public Methods
             public void OnWindowAwake(params object[] args)
@@ -116,7 +123,6 @@ namespace Debugger_For_Unity
                     m_numberOfButtonsPerLine = 1;
                 }
             }
-
 
             public void OnWindowDraw()
             {

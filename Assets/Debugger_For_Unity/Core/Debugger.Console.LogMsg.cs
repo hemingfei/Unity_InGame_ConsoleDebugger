@@ -14,6 +14,9 @@ namespace Debugger_For_Unity
 {
     public partial class Debugger
     {
+        /// <summary>
+        /// partial class, log message information
+        /// </summary>
         private sealed partial class Console
         {
             /// <summary>
@@ -21,6 +24,7 @@ namespace Debugger_For_Unity
             /// </summary>
             private sealed class LogMsg
             {
+                #region Public Methods
                 /// <summary>
                 /// Constructor
                 /// </summary>
@@ -34,7 +38,9 @@ namespace Debugger_For_Unity
                     LogMessage = logMessage;
                     StackTrack = stackTrack;
                 }
+                #endregion
 
+                #region  Attributes and Properties
                 /// <summary>
                 /// Properties
                 /// </summary>
@@ -46,6 +52,7 @@ namespace Debugger_For_Unity
                 public string LogMessage { get; private set; }
 
                 public string StackTrack { get; private set; }
+                #endregion
             }
         }
     }

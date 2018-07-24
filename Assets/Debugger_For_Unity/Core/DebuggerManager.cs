@@ -38,11 +38,20 @@ namespace Debugger_For_Unity {
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// constructor
+        /// </summary>
         public DebuggerManager()
         {
             m_debuggerWindowRoot = new WindowGroup();
         }
 
+        /// <summary>
+        /// register and store the window into the root
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="debuggerWindow"></param>
+        /// <param name="args"></param>
         public void RegisterDebuggerWindow(string path, IWindow debuggerWindow, params object[] args)
         {
             if (string.IsNullOrEmpty(path))

@@ -31,9 +31,7 @@ namespace Debugger_For_Unity {
             private const float TitleWidth = 240f;
             private Vector2 m_ScrollPosition = Vector2.zero;
             private const int MBSize = 1024 * 1024;
-
             private const int ShowSampleCount = 300;
-
             private DateTime m_SampleTime = DateTime.MinValue;
             private long m_SampleSize = 0;
             private long m_DuplicateSampleSize = 0;
@@ -42,6 +40,11 @@ namespace Debugger_For_Unity {
             #endregion
 
             #region Private Methods
+            /// <summary>
+            /// template of draw infomation
+            /// </summary>
+            /// <param name="title"></param>
+            /// <param name="content"></param>
             private void DrawInfo(string title, string content)
             {
                 GUILayout.BeginHorizontal();
@@ -52,11 +55,19 @@ namespace Debugger_For_Unity {
                 GUILayout.EndHorizontal();
             }
 
+            /// <summary>
+            /// resolution converter
+            /// </summary>
+            /// <param name="resolution"></param>
+            /// <returns></returns>
             private string ConvertResolution(Resolution resolution)
             {
                 return string.Format("{0} x {1} @ {2}Hz", resolution.width.ToString(), resolution.height.ToString(), resolution.refreshRate.ToString());
             }
 
+            /// <summary>
+            /// take sample of the active scene's gameobject in hierachy
+            /// </summary>
             private void TakeSample()
             {
                 m_SampleTime = DateTime.Now;
@@ -96,6 +107,11 @@ namespace Debugger_For_Unity {
                 }
             }
 
+            /// <summary>
+            /// size converter
+            /// </summary>
+            /// <param name="size"></param>
+            /// <returns></returns>
             private string GetSizeString(long size)
             {
                 if (size < 1024L)
@@ -121,6 +137,12 @@ namespace Debugger_For_Unity {
                 return string.Format("{0} TB", (size / 1024f / 1024f / 1024f / 1024f).ToString("F2"));
             }
 
+            /// <summary>
+            /// compare the size
+            /// </summary>
+            /// <param name="a"></param>
+            /// <param name="b"></param>
+            /// <returns></returns>
             private int SampleComparer(Sample a, Sample b)
             {
                 int result = b.Size.CompareTo(a.Size);
@@ -138,6 +160,12 @@ namespace Debugger_For_Unity {
                 return a.Name.CompareTo(b.Name);
             }
 
+            /// <summary>
+            /// traverse of the root gameobjects
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <param name="samples"></param>
+            /// <returns></returns>
             private HashSet<GameObject> Traverse(GameObject obj, HashSet<GameObject> samples)
             {
 
@@ -166,6 +194,8 @@ namespace Debugger_For_Unity {
             {
                 m_ScrollPosition = GUILayout.BeginScrollView(m_ScrollPosition);
                 {
+                    // infomation of device
+
                     GUILayout.BeginVertical("box");
                     {
                         GUILayout.Label("<b>Device</b>");
@@ -176,6 +206,8 @@ namespace Debugger_For_Unity {
                         DrawInfo("DPI", Screen.dpi.ToString("F2"));
                     }
                     GUILayout.EndVertical();
+
+                    // infomation of profiler
 
                     GUILayout.BeginVertical("box");
                     {
@@ -193,6 +225,7 @@ namespace Debugger_For_Unity {
                     }
                     GUILayout.EndVertical();
 
+                    // infomation of gameobjects in hierachy
 
                     GUILayout.BeginVertical("box");
                     {
@@ -269,7 +302,9 @@ namespace Debugger_For_Unity {
             #endregion
         }
 
-
+        /// <summary>
+        /// the information of each sample that taked
+        /// </summary>
         private sealed class Sample
         {
             #region  Attributes and Properties

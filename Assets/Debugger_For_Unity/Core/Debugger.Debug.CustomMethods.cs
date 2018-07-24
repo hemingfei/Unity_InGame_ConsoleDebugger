@@ -14,7 +14,9 @@ using UnityEngine;
 namespace Debugger_For_Unity {
 
 	/// <summary>
-	/// Class Explanation
+	/// Partial Class Of Debugger (MonoBehaviour)
+    /// Custom Methods Written Here
+    /// Remenber add the attributes
 	/// </summary>
 	public partial class Debugger
 	{

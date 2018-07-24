@@ -20,7 +20,7 @@ namespace Debugger_For_Unity
 {
 
     /// <summary>
-    /// Class Explanation
+    /// partial class, code window
     /// </summary>
     public partial class Debugger
     {
@@ -29,7 +29,6 @@ namespace Debugger_For_Unity
         public class Code : IWindow
         {
             #region  Attributes and Properties
-            //public Debugger Debugger { get; set; }
             public Debug Debug { get; set; }
             public Debugger Debugger { get; set; }
             /// <summary>
@@ -62,10 +61,15 @@ namespace Debugger_For_Unity
             private string m_inputAnswer = "";
             #endregion
 
+            #region Public Methods
+            /// <summary>
+            /// constructor
+            /// </summary>
             public Code()
             {
 
             }
+            #endregion
 
             #region Private Methods
             /// <summary>
@@ -157,7 +161,6 @@ namespace Debugger_For_Unity
             }
             #endregion
 
-
             #region Interface Public Methods
             public void OnWindowAwake(params object[] args)
             {
@@ -217,7 +220,6 @@ namespace Debugger_For_Unity
                 m_debugCodeDescriptionArray = m_debugCodeDescritionDict.Values.ToArray();
                 m_debugCodeCustomCodeArray = m_debugCodeCustomCodeDict.Values.ToArray();
             }
-
 
             public void OnWindowDraw()
             {

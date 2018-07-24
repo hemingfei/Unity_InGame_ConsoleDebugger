@@ -26,7 +26,7 @@ namespace Debugger_For_Unity
         
         [Header("Drag If You Want")]
         [SerializeField]
-        private Texture m_infoImage = null;
+        private Texture m_infoImage = null; // images shown in small icon
 
         [SerializeField]
         private Texture m_warningImage = null;
@@ -38,11 +38,11 @@ namespace Debugger_For_Unity
         private GUISkin m_skin = null; // gui skin if you want
 
         [SerializeField]
-        private GameObject m_maskCanvas = null; // when open debugger window, it can touch the background or not
+        private GameObject m_maskCanvas = null; // when open debugger window, it can touch the background game or not
 
         [Header("Settings")]
         [SerializeField]
-        private float m_initWindowScale = 1;
+        private float m_initWindowScale = 1; // init scale
 
         /// <summary>
         /// Size
@@ -60,7 +60,7 @@ namespace Debugger_For_Unity
         /// Windows
         /// </summary>
         
-        private DebuggerManager m_debuggerManager = new DebuggerManager();
+        private DebuggerManager m_debuggerManager = new DebuggerManager(); // stores all registed windows
 
         private float m_uiAdaptiveScale = 1;
 
@@ -71,9 +71,6 @@ namespace Debugger_For_Unity
 
         [SerializeField]
         private Console m_console = new Console();
-
-        //[SerializeField]
-        //private Debug m_debug = new Debug();
 
         [SerializeField]
         private Code  m_code = new Code();
@@ -106,7 +103,7 @@ namespace Debugger_For_Unity
         #region Engine Methods
         private void Awake()
         {
-            // just in cast the SerializeField parameter set wrong in awake
+            // just in cast if the SerializeField parameter set wrong in awake
             if (m_initWindowScale <= 0)
             {
                 m_initWindowScale = 0.1f;
@@ -124,7 +121,7 @@ namespace Debugger_For_Unity
             WindowRect = DefaultWindowRect;
 
             // UI adaptive
-            m_uiAdaptiveScale = (Screen.width / 960.0f); // using 960 * 540 as default native resolution
+            m_uiAdaptiveScale = (Screen.width / 960.0f); // using 960 * 540 as default native resolution refrence
 
             m_resolution = new Vector2(Screen.width, Screen.height);
 
@@ -143,18 +140,19 @@ namespace Debugger_For_Unity
 
         private void Start()
         {
-            // register the windows
-            RegisterDebuggerWindow("Console", m_console);
+            // set
             m_code.Debugger = this;
             m_select.Debugger = this;
             m_button.Debugger = this;
             m_windowSize.Debugger = this;
+            // register the windows
+            RegisterDebuggerWindow("Console", m_console);
             RegisterDebuggerWindow("Debug/Code", m_code);
             RegisterDebuggerWindow("Debug/Select", m_select);
             RegisterDebuggerWindow("Debug/Button", m_button);
             RegisterDebuggerWindow("Billboard", m_billboard);
             RegisterDebuggerWindow("Window", m_windowSize);
-
+            // example of partial custom code class if want to use untiy engine's start
             UnityStartForPartialCustomMethods();
         }
 
@@ -167,7 +165,6 @@ namespace Debugger_For_Unity
             if (m_resolution.x != Screen.width || m_resolution.y != Screen.height)
             {
                 m_uiAdaptiveScale = (Screen.width / 960.0f);
-
                 m_resolution.x = Screen.width;
                 m_resolution.y = Screen.height;
             }
@@ -216,7 +213,7 @@ namespace Debugger_For_Unity
 
         #region Private Methods
         /// <summary>
-        /// register the window into the manager, which will be recored in the root winddow of manager
+        /// register the window into the manager, which will be recored in the manager's root window
         /// </summary>
         /// <param name="path"></param>
         /// <param name="debuggerWindow"></param>
@@ -279,7 +276,7 @@ namespace Debugger_For_Unity
         }
 
         /// <summary>
-        /// drwo the window in OnGUI
+        /// draw the window in OnGUI
         /// </summary>
         /// <param name="windowId"></param>
         private void DrawWindow(int windowId)
@@ -292,7 +289,7 @@ namespace Debugger_For_Unity
         }
 
         /// <summary>
-        /// drwo the windows from window group
+        /// draw the windows from window group
         /// </summary>
         /// <param name="debuggerWindowGroup"></param>
         private void DrawDebuggerWindowGroup(WindowGroup debuggerWindowGroup)
@@ -339,7 +336,6 @@ namespace Debugger_For_Unity
                 debuggerWindowGroup.SelectedWindow.OnWindowDraw();
             }
         }
-
         #endregion
     }
 }
