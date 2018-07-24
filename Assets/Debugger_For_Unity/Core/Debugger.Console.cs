@@ -67,6 +67,12 @@ namespace Debugger_For_Unity {
             public void OnWindowAwake(params object[] args)
             {
                 Application.logMessageReceived += OnLogMessageReceived;
+
+                // just in cast the SerializeField parameter set wrong in awake
+                if (m_maxLines < 0)
+                {
+                    m_maxLines = 0;
+                }
             }
 
             public void OnWindowDestroy()

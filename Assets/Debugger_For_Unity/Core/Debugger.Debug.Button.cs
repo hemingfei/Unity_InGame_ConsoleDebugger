@@ -60,7 +60,7 @@ namespace Debugger_For_Unity
                 MethodInfo method = typeof(Debugger).GetMethod(m_debugButtonMethodDict[index]);
                 if (method.GetParameters().Length > 0)
                 {
-                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters, should no be registered as button, RETURN.");
+                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters, should not be registered as button, RETURN.");
                     return;
                 }
                 method.Invoke(Debugger, null);
@@ -73,6 +73,8 @@ namespace Debugger_For_Unity
             {
                 Type type = typeof(Debugger);
 
+                Dictionary<int, int> sortPriorityDict = new Dictionary<int, int>();
+
                 foreach (MethodInfo method in type.GetMethods())
                 {
                     foreach (Attribute attr in method.GetCustomAttributes(true))
@@ -81,9 +83,37 @@ namespace Debugger_For_Unity
                         {
                             m_debugButtonMethodDict.Add(m_debugButtonMethodNum, method.Name);
                             m_debugButtonDescritionDict.Add(m_debugButtonMethodNum, ((DebuggerButtonDebugAttribute)attr).Description);
+                            sortPriorityDict.Add(m_debugButtonMethodNum, ((DebuggerButtonDebugAttribute)attr).Priority);
                             m_debugButtonMethodNum++;
                         }
                     }
+                }
+
+                // Priority
+
+                // ... Use LINQ to specify sorting by value.
+                var items = from pair in sortPriorityDict
+                            orderby pair.Value ascending
+                            select pair;
+
+                Dictionary<int, string> m_newMethodDict = new Dictionary<int, string>();
+                Dictionary<int, string> m_newDescritionDict = new Dictionary<int, string>();
+                int index = 0;
+                // re value
+                foreach (KeyValuePair<int, int> pair in items)
+                {
+                    m_newMethodDict.Add(index, m_debugButtonMethodDict[pair.Key]);
+                    m_newDescritionDict.Add(index, m_debugButtonDescritionDict[pair.Key]);
+                    index++;
+                }
+
+                m_debugButtonMethodDict = m_newMethodDict;
+                m_debugButtonDescritionDict = m_newDescritionDict;
+
+                // just in cast the SerializeField parameter set wrong in awake
+                if (m_numberOfButtonsPerLine <= 0)
+                {
+                    m_numberOfButtonsPerLine = 1;
                 }
             }
 

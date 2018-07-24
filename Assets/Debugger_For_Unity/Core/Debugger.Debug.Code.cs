@@ -163,6 +163,8 @@ namespace Debugger_For_Unity
             {
                 Type type = typeof(Debugger);
 
+                Dictionary<int, int> sortPriorityDict = new Dictionary<int, int>();
+
                 foreach (MethodInfo method in type.GetMethods())
                 {
                     foreach (Attribute attr in method.GetCustomAttributes(true))
@@ -178,10 +180,39 @@ namespace Debugger_For_Unity
                             string des = ((DebuggerCodeDebugAttribute)attr).Description;
                             //des = new Regex("[\\s]+").Replace(des, "_");
                             m_debugCodeDescritionDict.Add(m_debugCodeMethodNum, des);
+
+                            sortPriorityDict.Add(m_debugCodeMethodNum, ((DebuggerCodeDebugAttribute)attr).Priority);
+
                             m_debugCodeMethodNum++;
                         }
                     }
                 }
+
+                //
+                // Priority
+                //
+
+                // ... Use LINQ to specify sorting by value.
+                var items = from pair in sortPriorityDict
+                            orderby pair.Value ascending
+                            select pair;
+
+                Dictionary<int, string> m_newMethodDict = new Dictionary<int, string>();
+                Dictionary<int, string> m_newCustomCodeDict = new Dictionary<int, string>();
+                Dictionary<int, string> m_newDescritionDict = new Dictionary<int, string>();
+                int index = 0;
+                // re value
+                foreach (KeyValuePair<int, int> pair in items)
+                {
+                    m_newMethodDict.Add(index, m_debugCodeMethodDict[pair.Key]);
+                    m_newCustomCodeDict.Add(index, m_debugCodeCustomCodeDict[pair.Key]);
+                    m_newDescritionDict.Add(index, m_debugCodeDescritionDict[pair.Key]);
+                    index++;
+                }
+
+                m_debugCodeMethodDict = m_newMethodDict;
+                m_debugCodeCustomCodeDict = m_newCustomCodeDict;
+                m_debugCodeDescritionDict = m_newDescritionDict;
 
                 m_debugCodeDescriptionArray = m_debugCodeDescritionDict.Values.ToArray();
                 m_debugCodeCustomCodeArray = m_debugCodeCustomCodeDict.Values.ToArray();
@@ -219,11 +250,11 @@ namespace Debugger_For_Unity
 
                     if (m_displayedCode != "" && m_showCodeScroll != false)
                     {
-                        Rect codeDropDownRect = new Rect(0, 0, 400, 20);
+                        Rect codeDropDownRect = new Rect(0, 30, 400, 25);
 
-                        scrollViewCodeVector = GUI.BeginScrollView(new Rect(5, 100, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 25))), scrollViewCodeVector, new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 25))));
+                        scrollViewCodeVector = GUI.BeginScrollView(new Rect(5, 100, codeDropDownRect.width+ 20, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 20))), scrollViewCodeVector, new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 25))));
 
-                        GUI.Box(new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 25))), "");
+                        GUI.Box(new Rect(0, 0, codeDropDownRect.width, Mathf.Max(codeDropDownRect.height, (m_matchedCodeArray.Length * 20))), "");
 
                         for (int index = 0; index < m_matchedCodeArray.Length; index++)
                         {

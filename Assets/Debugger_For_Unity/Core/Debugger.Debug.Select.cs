@@ -56,7 +56,7 @@ namespace Debugger_For_Unity
                 MethodInfo method = typeof(Debugger).GetMethod(m_debugSelectMethodDict[index]);
                 if (method.GetParameters().Length > 0)
                 {
-                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters, should no be registered as Select, RETURN.");
+                    UnityEngine.Debug.LogWarning(method.Name + " Method has unwanted parameters, should not be registered as Select, RETURN.");
                     return;
                 }
                 method.Invoke(Debugger, null);
@@ -78,6 +78,8 @@ namespace Debugger_For_Unity
             {
                 Type type = typeof(Debugger);
 
+                Dictionary<int, int> sortPriorityDict = new Dictionary<int, int>();
+
                 foreach (MethodInfo method in type.GetMethods())
                 {
                     foreach (Attribute attr in method.GetCustomAttributes(true))
@@ -86,10 +88,35 @@ namespace Debugger_For_Unity
                         {
                             m_debugSelectMethodDict.Add(m_debugSelectMethodNum, method.Name);
                             m_debugSelectDescritionDict.Add(m_debugSelectMethodNum, ((DebuggerSelectDebugAttribute)attr).Description);
+                            sortPriorityDict.Add(m_debugSelectMethodNum, ((DebuggerSelectDebugAttribute)attr).Priority);
                             m_debugSelectMethodNum++;
                         }
                     }
                 }
+
+                //
+                // Priority
+                //
+
+                // ... Use LINQ to specify sorting by value.
+                var items = from pair in sortPriorityDict
+                            orderby pair.Value ascending
+                            select pair;
+
+                Dictionary<int, string> m_newMethodDict = new Dictionary<int, string>();
+                Dictionary<int, string> m_newDescritionDict = new Dictionary<int, string>();
+                int index = 0;
+                // re value
+                foreach (KeyValuePair<int, int> pair in items)
+                {
+                    m_newMethodDict.Add(index, m_debugSelectMethodDict[pair.Key]);
+                    m_newDescritionDict.Add(index, m_debugSelectDescritionDict[pair.Key]);
+                    index++;
+                }
+
+                m_debugSelectMethodDict = m_newMethodDict;
+                m_debugSelectDescritionDict = m_newDescritionDict;
+
 
                 m_debugSelectDescriptionArray = m_debugSelectDescritionDict.Values.ToArray();
             }

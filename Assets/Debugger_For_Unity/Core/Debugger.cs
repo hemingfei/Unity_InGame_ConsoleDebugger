@@ -106,6 +106,12 @@ namespace Debugger_For_Unity
         #region Engine Methods
         private void Awake()
         {
+            // just in cast the SerializeField parameter set wrong in awake
+            if (m_initWindowScale <= 0)
+            {
+                m_initWindowScale = 0.1f;
+            }
+
             // give default values here (C# 4)
             DefaultWindowScale = m_initWindowScale;
 
@@ -148,6 +154,8 @@ namespace Debugger_For_Unity
             RegisterDebuggerWindow("Debug/Button", m_button);
             RegisterDebuggerWindow("Billboard", m_billboard);
             RegisterDebuggerWindow("Window", m_windowSize);
+
+            UnityStartForPartialCustomMethods();
         }
 
         private void Update()

@@ -18,9 +18,19 @@ namespace Debugger_For_Unity {
 	/// </summary>
 	public partial class Debugger
 	{
+        #region Engion Methods
+        /// <summary>
+        /// In case you don't know how to use the Unity Methdos In Partial Class
+        /// </summary>
+        private void UnityStartForPartialCustomMethods()
+        {
+
+        }
+        #endregion
+
 
         #region Public Methods
-        [DebuggerButtonDebug("test1", 1)]
+        [DebuggerButtonDebug("test1", -1)]
         public void Test1()
         {
             UnityEngine.Debug.Log("TEST1 LOG");
@@ -29,7 +39,7 @@ namespace Debugger_For_Unity {
 
         [DebuggerButtonDebug("test2", 1)]
         [DebuggerSelectDebug("test2 select", 1)]
-        [DebuggerCodeDebug("test2   code", "test2 description")]
+        [DebuggerCodeDebug("test2   code", "test2 description", 2)]
         public void Test2(int a, string bb, int ccc, float ddd, bool eee)
         {
             int q = a + ccc;
@@ -41,7 +51,7 @@ namespace Debugger_For_Unity {
             UnityEngine.Debug.Log("TEST2, 1st param + 3rd param is : " + q);
         }
 
-        [DebuggerButtonDebug("test3", 1)]
+        [DebuggerButtonDebug("test3", 6)]
         public void Test3()
         {
             UnityEngine.Debug.Log("TEST3 LOG");
@@ -53,14 +63,14 @@ namespace Debugger_For_Unity {
             UnityEngine.Debug.Log("TEST4 LOG");
         }
         [DebuggerButtonDebug("test5", 1)]
-        [DebuggerSelectDebug("test5 select", 1)]
-        [DebuggerCodeDebug("test5  code", "test5 description")]
+        [DebuggerSelectDebug("test5 select", 3)]
+        [DebuggerCodeDebug("test5  code", "test5 description", 1)]
         public void Test5()
         {
             UnityEngine.Debug.Log("TEST5 LOG");
         }
 
-        [DebuggerButtonDebug("test6", 1)]
+        [DebuggerButtonDebug("test6", 0)]
         [DebuggerSelectDebug("test6 select", 1)]
         [DebuggerCodeDebug("test6  code", "test6 description")]
         public void Test6()
@@ -68,7 +78,7 @@ namespace Debugger_For_Unity {
             UnityEngine.Debug.Log("TEST6 LOG");
         }
 
-        [DebuggerButtonDebug("test7", 1)]
+        [DebuggerButtonDebug("test7", 0)]
         [DebuggerSelectDebug("test7 select", 1)]
         [DebuggerCodeDebug("test7  code", "test7 description")]
         public void Test7()
@@ -76,15 +86,15 @@ namespace Debugger_For_Unity {
             UnityEngine.Debug.Log("TEST7 LOG");
         }
 
-        [DebuggerButtonDebug("test8", 1)]
-        [DebuggerSelectDebug("test8 select", 1)]
+        [DebuggerButtonDebug("test8", 0)]
+        [DebuggerSelectDebug("test8 select", 0)]
         [DebuggerCodeDebug("test8  code", "test8 description")]
         public void Test8()
         {
             UnityEngine.Debug.Log("TEST8 LOG");
         }
 
-        [DebuggerButtonDebug("test9", 1)]
+        [DebuggerButtonDebug("test9")]
         [DebuggerSelectDebug("test9 select", 1)]
         [DebuggerCodeDebug("test9  code", "test9 description")]
         public void Test9()
@@ -92,7 +102,7 @@ namespace Debugger_For_Unity {
             UnityEngine.Debug.Log("TEST9 LOG");
         }
 
-        [DebuggerButtonDebug("test10", 1)]
+        [DebuggerButtonDebug("test10")]
         [DebuggerSelectDebug("test10 select", 1)]
         [DebuggerCodeDebug("test10  code", "test10 description")]
         public void Test10()

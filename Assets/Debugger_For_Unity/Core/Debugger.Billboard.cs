@@ -53,22 +53,6 @@ namespace Debugger_For_Unity {
             private List<Sample> m_Samples = new List<Sample>();
             #endregion
 
-
-            #region Engine Methods
-
-            #endregion
-
-
-            #region Public Methods
-
-            #endregion
-
-
-            #region Protected Methods
-
-            #endregion
-
-
             #region Private Methods
             private void DrawInfo(string title, string content)
             {
@@ -177,11 +161,6 @@ namespace Debugger_For_Unity {
                 samples.Add(obj);
                 return samples;
             }
-            #endregion
-
-
-            #region Static Methods
-
             #endregion
 
             #region Interface Public Method
@@ -305,54 +284,25 @@ namespace Debugger_For_Unity {
 
         private sealed class Sample
         {
-            private readonly string m_Name;
-            private readonly string m_Type;
-            private readonly long m_Size;
-            private bool m_Highlight;
+            #region  Attributes and Properties
+            public string Name { get; private set; }
 
+            public string Type { get; private set; }
+
+            public long Size { get; private set; }
+
+            public bool Highlight { get; set; }
+            #endregion
+
+            #region Public Method
             public Sample(string name, string type, long size)
             {
-                m_Name = name;
-                m_Type = type;
-                m_Size = size;
-                m_Highlight = false;
+                Name = name;
+                Type = type;
+                Size = size;
+                Highlight = false;
             }
-
-            public string Name
-            {
-                get
-                {
-                    return m_Name;
-                }
-            }
-
-            public string Type
-            {
-                get
-                {
-                    return m_Type;
-                }
-            }
-
-            public long Size
-            {
-                get
-                {
-                    return m_Size;
-                }
-            }
-
-            public bool Highlight
-            {
-                get
-                {
-                    return m_Highlight;
-                }
-                set
-                {
-                    m_Highlight = value;
-                }
-            }
+            #endregion
         }
     }
 }
