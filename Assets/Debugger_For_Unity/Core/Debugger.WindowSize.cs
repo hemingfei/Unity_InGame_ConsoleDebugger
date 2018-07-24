@@ -24,49 +24,18 @@ namespace Debugger_For_Unity {
         {
             #region  Attributes and Properties
             /// <summary>
-            /// Public Members
-            /// </summary>
-
-            /// <summary>
             /// Properties
             /// </summary>
             public Debugger Debugger { get; set; }
-            /// <summary>
-            /// Protected Members
-            /// </summary>
 
             /// <summary>
             /// Private Members
             /// </summary>
             private const float TitleWidth = 240f;
             private Vector2 m_ScrollPosition = Vector2.zero;
-
             #endregion
 
-
-            #region Engine Methods
-
-            #endregion
-
-
-            #region Public Methods
-
-            #endregion
-
-
-            #region Protected Methods
-
-            #endregion
-
-
-            #region Private Methods
-
-            #endregion
-
-
-            #region Static Methods
-
-            #endregion
+            #region Interface Methods
             public void OnWindowAwake(params object[] args)
             {
 
@@ -206,6 +175,7 @@ namespace Debugger_For_Unity {
             {
                 
             }
+            #endregion
         }
 
     }

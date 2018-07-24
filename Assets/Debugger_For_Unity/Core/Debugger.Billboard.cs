@@ -26,18 +26,6 @@ namespace Debugger_For_Unity {
         {
             #region  Attributes and Properties
             /// <summary>
-            /// Public Members
-            /// </summary>
-
-            /// <summary>
-            /// Properties
-            /// </summary>
-
-            /// <summary>
-            /// Protected Members
-            /// </summary>
-
-            /// <summary>
             /// Private Members
             /// </summary>
             private const float TitleWidth = 240f;
